@@ -2,8 +2,8 @@
 	"name"        : "screeps-dashboard-server",
 	"scripts": {
 		"start": "forever start ./forever/index.json && forever list",
-		"stop": "forever stop ./forever/index.json && forever list",
-		"restart": "forever restart ./forever/index.json && forever list",
+		"stop": "forever stop screeps-app && forever stop screeps-server && forever list",
+		"restart": "forever restartall && forever list",
 		"del:db": "rm db.json"
 	},
 	"dependencies": {
