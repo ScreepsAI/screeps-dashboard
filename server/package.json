@@ -1,0 +1,11 @@
+{
+	"name"        : "screeps-dashboard-server",
+	"dependencies": {
+		"express"    : "^4.16.3",
+		"lowdb"      : "^1.0.0",
+		"path"       : "^0.12.7",
+		"screeps-api": "^1.4.0",
+		"lodash"     : "^4.17.10",
+		"moment"     : "^2.22.1"
+	}
+}
