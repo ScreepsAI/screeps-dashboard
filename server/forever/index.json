@@ -1,0 +1,18 @@
+[
+	{
+		"uid"           : "screeps-app",
+		"watch"         : true,
+		"append"        : true,
+		"watchDirectory": "/",
+		"watchIgnore"   : "/db.json",
+		"script"        : "/app.js"
+	},
+	{
+		"uid"   : "screeps-server",
+		"watch" : true,
+		"append": true,
+		"watchDirectory": "/",
+		"watchIgnore"   : "/db.json",
+		"script": "/server.js"
+	}
+]

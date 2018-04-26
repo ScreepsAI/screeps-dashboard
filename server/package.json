@@ -1,5 +1,11 @@
 {
 	"name"        : "screeps-dashboard-server",
+	"scripts": {
+		"start": "forever start ./forever/index.json && forever list",
+		"stop": "forever stop ./forever/index.json && forever list",
+		"restart": "forever restart ./forever/index.json && forever list",
+		"del:db": "rm db.json"
+	},
 	"dependencies": {
 		"express"    : "^4.16.3",
 		"lowdb"      : "^1.0.0",
