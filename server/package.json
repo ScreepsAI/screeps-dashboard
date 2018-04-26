@@ -1,5 +1,13 @@
 {
 	"name"        : "screeps-dashboard-server",
+	"version": "1.0.0",
+	"main": "app.js",
+	"description": "Dashboard for screeps game",
+	"author": {
+		"name": "CanisMinor",
+		"email": "i@canisminor.cc",
+		"url": "https://canisminor.cc/"
+	},
 	"scripts": {
 		"start": "forever start ./forever/index.json && forever list",
 		"stop": "forever stop screeps-app && forever stop screeps-server && forever list",

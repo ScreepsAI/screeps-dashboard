@@ -1,12 +1,18 @@
 {
   "name": "screeps-dashboard",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
+  "description": "Dashboard for screeps game",
+  "author": {
+    "name": "CanisMinor",
+    "email": "i@canisminor.cc",
+    "url": "https://canisminor.cc/"
+  },
   "license": "MIT",
   "scripts": {
     "start": "cross-env DISABLE_ESLINT=true roadhog dev",
     "build": "roadhog build",
-    "start:server": "node server/app.js",
+    "start:server": "cd server && yarn start",
     "lint": "lint-staged",
     "lint:es": "eslint --fix --ext .js server"
   },
