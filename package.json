@@ -8,7 +8,7 @@
     "build": "roadhog build",
     "start:server": "node server/app.js",
     "lint": "lint-staged",
-    "lint:es": "eslint --fix --ext .js src"
+    "lint:es": "eslint --fix --ext .js server"
   },
   "pre-commit": [
     "lint"
