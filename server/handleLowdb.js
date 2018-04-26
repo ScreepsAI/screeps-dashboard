@@ -3,7 +3,8 @@ const moment = require('moment');
 const _ = require('lodash');
 const FileSync = require('lowdb/adapters/FileSync');
 const lowdb = require('lowdb');
-const db = lowdb(new FileSync('server/db.json'));
+const path = require('path');
+const db = lowdb(new FileSync(path.resolve('db.json')));
 const config = require('./config.json');
 
 module.exports = function(data) {

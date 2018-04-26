@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const FileSync = require('lowdb/adapters/FileSync');
 const lowdb = require('lowdb');
-const db = lowdb(new FileSync('server/db.json'));
+const path = require('path');
+const db = lowdb(new FileSync(path.resolve('db.json')));
 
 router.get('/', function(req, res, next) {
   const all = db.get('count').value();
