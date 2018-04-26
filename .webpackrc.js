@@ -24,7 +24,7 @@ export default {
 	},
 	proxy              : {
 		'/api': {
-			target      : 'https://canisminor.cc',
+			target      : 'http://screeps.canisminor.cc',
 			changeOrigin: true,
 			xfwd        : true,
 			secure      : true

@@ -75,8 +75,13 @@ function buildGarph(path, value) {
 
 function pushGrafana(data) {
   let { type, stats } = data;
-  if (!stats) return console.log('No stats found, is Memory.stats defined?');
-  console.log('Pushing stats');
+  if (!stats)
+    return console.log(
+      `[${moment().format('hh:mm:ss')}]`,
+      'No stats found, is Memory.stats defined?'
+    );
+  console.log(`[${moment().format('hh:mm:ss')}]`, 'Pushing stats');
+  stats = stats.stats;
   if (type === 'application/json') stats = JSON.stringify(stats);
   request(
     {
@@ -94,15 +99,17 @@ function pushGrafana(data) {
     (err, res, data) => {
       if (res && res.statusCode === 413) {
         let len = Math.round(JSON.stringify(stats).length / 1024);
-        console.log(`stats size: ${len}kb`);
+        console.log(`[${moment().format('hh:mm:ss')}]`, `stats size: ${len}kb`);
         console.log(
+          `[${moment().format('hh:mm:ss')}]`,
           `stats limit: 10mb (As of Mar 28, 2017) (If you hit this limit, you are probably doing something wrong)`
         );
         console.error(
+          `[${moment().format('hh:mm:ss')}]`,
           `It appears your stats data is too large, please check to make sure you are not submitting unneeded stats, such as old rooms. \n If you legitimately need to submit stats this large, contact ags131 on slack for a limit bump`
         );
       }
-      console.log('Result:', data);
+      console.log(`[${moment().format('hh:mm:ss')}]`, 'Result:', data);
       if (err) console.error(err);
     }
   );

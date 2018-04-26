@@ -1,0 +1,32 @@
+@import 'import';
+@import 'root';
+html,
+body,
+:global(#root) {
+  height: 100%;
+}
+:global {
+  .ant-back-top {
+    bottom: 4rem;
+    right: 4rem;
+    @include media($m-middle) {
+      display: none !important;
+    }
+  }
+
+  .ant-back-top-content {
+    background: #222;
+    border-radius: 0;
+  }
+
+  .unload {
+    opacity: 0.4;
+    transform: translate3d(0, 80px, 0);
+    transition: 0.5s ease-in-out;
+  }
+
+  .load {
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
+}
