@@ -5,7 +5,7 @@ const FileSync = require('lowdb/adapters/FileSync');
 const lowdb = require('lowdb');
 const path = require('path');
 const db = lowdb(new FileSync(path.resolve('db.json')), {
-  autosave: false,
+  autosave: true,
   async: true,
 });
 const config = require('./config.json');
