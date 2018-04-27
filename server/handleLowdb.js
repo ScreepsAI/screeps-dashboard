@@ -79,7 +79,7 @@ function buildGarph(path, value) {
   value = Math.floor(value);
   let oldValue = db.get(`graph.${path}`).value();
   if (!oldValue || !_.isArray(oldValue)) {
-    oldValue = [value];
+    oldValue = [];
   } else {
     if (oldValue.length > 180) oldValue.shift();
     oldValue.push(value);
