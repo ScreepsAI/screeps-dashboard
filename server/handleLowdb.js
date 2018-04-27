@@ -36,7 +36,7 @@ module.exports = function(data) {
   const gclGraph = {
     progress: gcl.progress,
     progressTotal: gcl.progressTotal,
-    delta: buildGarph(`gcl.deltas`, glcDelta),
+    deltas: buildGarph(`gcl.deltas`, glcDelta),
   };
 
   const cpuGraph = {
