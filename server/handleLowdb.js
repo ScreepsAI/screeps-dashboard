@@ -4,7 +4,10 @@ const _ = require('lodash');
 const FileSync = require('lowdb/adapters/FileSync');
 const lowdb = require('lowdb');
 const path = require('path');
-const db = lowdb(new FileSync(path.resolve('db.json')));
+const db = lowdb(new FileSync(path.resolve('db.json')), {
+  autosave: false,
+  async: true,
+});
 const config = require('./config.json');
 
 module.exports = function(data) {
