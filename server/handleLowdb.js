@@ -4,7 +4,10 @@ const _ = require('lodash');
 const FileSync = require('lowdb/adapters/FileSync');
 const lowdb = require('lowdb');
 const path = require('path');
-const db = lowdb(new FileSync(path.resolve('db.json')));
+const db = lowdb(new FileSync(path.resolve('db.json')), {
+  autosave: true,
+  async: true,
+});
 const config = require('./config.json');
 
 module.exports = function(data) {
@@ -63,8 +66,6 @@ module.exports = function(data) {
   db.set('graph', graphData).write();
 
   db.update('count', n => n + 1).write();
-
-  db.save();
 
   console.log(`[${moment().format('hh:mm:ss')}]`, 'save memory data');
 };
