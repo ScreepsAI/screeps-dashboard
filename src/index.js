@@ -18,8 +18,13 @@ const app = dva({
 // 2. Plugins
 app.use(createLoading());
 
-// 3. Router
+// 3. Model
+app.model(require('./models/memory').default);
+app.model(require('./models/graph').default);
+app.model(require('./models/badge').default);
+
+// 4. Router
 app.router(router);
 
-// 4. Start
+// 5. Start
 app.start('#root');

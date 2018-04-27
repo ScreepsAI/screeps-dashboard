@@ -1,6 +1,7 @@
 # yarn lock file
 /yarn.lock
 /backup
+src/db.js
 
 # npm lock file (v5.0.0+)
 /package-lock.json

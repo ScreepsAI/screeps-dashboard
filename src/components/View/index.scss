@@ -1,0 +1,14 @@
+@import 'import';
+.view {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+.header {
+  padding: 3rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.body {
+  padding: 0 1rem;
+}

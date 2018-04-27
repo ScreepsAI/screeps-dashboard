@@ -1,5 +1,9 @@
 @import 'import';
 @import 'root';
+body {
+  background: #222;
+  color: #fff;
+}
 html,
 body,
 :global(#root) {
@@ -29,4 +33,7 @@ body,
     opacity: 1 !important;
     transform: translate3d(0, 0, 0) !important;
   }
+}
+div {
+  box-sizing: content-box;
 }

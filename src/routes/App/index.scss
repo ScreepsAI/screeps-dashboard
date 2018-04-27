@@ -1,0 +1,62 @@
+@import 'import';
+.loading {
+  text-align: center;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.showcase {
+  padding: 2rem;
+  background: linear-gradient(to bottom, #333 0%, #2a2a2a 100%);
+  box-shadow: 0 4px 8px rgba(#000, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.left {
+  display: flex;
+  align-items: center;
+  text-shadow: 0 2px 4px rgba(#000, 0.2);
+  flex: 1;
+}
+.badge {
+  border: 0.3rem solid #fff;
+  box-shadow: 0 4px 8px rgba(#000, 0.5);
+}
+.avatarContent {
+  margin-left: 1rem;
+}
+.username {
+  color: $c-font-yellow;
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+.progress {
+  margin-top: 0.5rem;
+
+  :global {
+    .ant-progress > div {
+      display: flex;
+      align-items: center;
+    }
+    .ant-progress-text {
+      color: rgba(#fff, 0.5);
+      font-size: 0.4rem;
+    }
+    .ant-progress-inner {
+      background-color: rgba(#000, 0.2);
+    }
+    .ant-progress-bg {
+      background-color: rgba(#fff, 0.8);
+    }
+  }
+}
+.progressActive {
+}
+.right {
+  display: flex;
+  > div {
+    margin-left: 1rem;
+  }
+}

@@ -11,10 +11,10 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env DISABLE_ESLINT=true roadhog dev",
-    "build": "roadhog build",
+    "build": "cross-env DISABLE_ESLINT=true roadhog build",
     "start:server": "cd server && yarn start",
     "lint": "lint-staged",
-    "lint:es": "eslint --fix --ext .js server"
+    "lint:es": "eslint --fix --ext .js src"
   },
   "pre-commit": [
     "lint"

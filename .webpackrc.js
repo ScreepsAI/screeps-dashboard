@@ -1,6 +1,6 @@
 import cssnano from 'cssnano';
 import pxtorem from 'postcss-pxtorem';
-import vendor from './src/vendor'
+import vendor from './src/vendor';
 
 export default {
 	entry              : {
@@ -19,6 +19,7 @@ export default {
 		'template': './src/index.ejs'
 	},
 	define             : {
+		'USERNAME': 'CanisMinor',
 		'$dirname': __dirname,
 		'$isDev'  : process.env.NODE_ENV === 'development'
 	},
@@ -32,9 +33,9 @@ export default {
 	},
 	extraPostCSSPlugins: [
 		pxtorem({
-			        rootValue: 16,
-			        propList: ['*'],
-			        minPixelValue: 2,
+			        rootValue    : 16,
+			        propList     : ['*'],
+			        minPixelValue: 2
 		        })
 	],
 	extraBabelPlugins  : [
@@ -56,8 +57,8 @@ export default {
 			browserslist       : ['iOS >= 8', 'Android >= 4'],
 			commons            : [
 				{
-					name     : 'vendor',
-					filename : 'vendor.[chunkhash].js',
+					name    : 'vendor',
+					filename: 'vendor.[chunkhash].js'
 				}
 			],
 			extraPostCSSPlugins: [

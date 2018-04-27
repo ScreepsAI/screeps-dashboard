@@ -26,6 +26,11 @@ module.exports = function(data) {
 
   const statsData = { tick, rooms, flags, tasks, gcl, leaderboard, market };
 
+  const gclGraph = {
+    progress: buildGarph('gcl.progress', gcl.progress),
+    progressTotal: gcl.progressTotal,
+  };
+
   const cpuGraph = {
     limit: cpu.limit,
     used: buildGarph('cpu.used', cpu.used),
@@ -33,6 +38,7 @@ module.exports = function(data) {
   };
 
   const graphData = {
+    gcl: gclGraph,
     cpu: cpuGraph,
     rooms: {},
   };
@@ -64,7 +70,7 @@ module.exports = function(data) {
 function buildGarph(path, value) {
   value = Math.floor(value);
   let oldValue = db.get(`graph.${path}`).value();
-  if (!oldValue) {
+  if (!oldValue || !_.isArray(oldValue)) {
     oldValue = [value];
   } else {
     if (oldValue.length > 180) oldValue.shift();

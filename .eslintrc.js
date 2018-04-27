@@ -27,6 +27,7 @@ module.exports = {
     'navigator': true,
     '$': true,
     'THREE': true,
+    'USERNAME': true,
   },
   env: {
     'es6': true,
