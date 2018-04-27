@@ -5,54 +5,58 @@ const lowdb = require('lowdb');
 const path = require('path');
 const db = lowdb(new FileSync(path.resolve('db.json')));
 
-setInterval(() => {
-  db.read();
-}, 60000);
+function read() {
+  if (Date.now() - db.get('time').value() > 60000) db.read();
+}
 
 router.get('(/api)?/', function(req, res, next) {
+  read();
   res.json({
-    err: 0,
-    msg: '',
-    data: db.get('count').value(),
+    count: db.get('count').value(),
+    time: db.get('time').value(),
   });
 });
 
 router.get('(/api)?/stats', (req, res, next) => {
+  read();
   res.json({
-    err: 0,
-    msg: '',
+    count: db.get('count').value(),
+    time: db.get('time').value(),
     data: db.get('stats').value(),
   });
 });
 
 router.get('(/api)?/stats/*', (req, res, next) => {
+  read();
   const url = req.url
     .toString()
     .replace(/^\//, '')
     .replace(/\//g, '.');
   res.json({
-    err: 0,
-    msg: '',
+    count: db.get('count').value(),
+    time: db.get('time').value(),
     data: db.get(url).value(),
   });
 });
 
 router.get('(/api)?/graph', (req, res, next) => {
+  read();
   res.json({
-    err: 0,
-    msg: '',
+    count: db.get('count').value(),
+    time: db.get('time').value(),
     data: db.get('graph').value(),
   });
 });
 
 router.get('(/api)?/graph/*', (req, res, next) => {
+  read();
   const url = req.url
     .toString()
     .replace(/^\//, '')
     .replace(/\//g, '.');
   res.json({
-    err: 0,
-    msg: '',
+    count: db.get('count').value(),
+    time: db.get('time').value(),
     data: db.get(url).value(),
   });
 });

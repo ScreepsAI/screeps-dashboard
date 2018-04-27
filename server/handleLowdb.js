@@ -11,10 +11,7 @@ const db = lowdb(new FileSync(path.resolve('db.json')), {
 const config = require('./config.json');
 
 module.exports = function(data) {
-  try {
-    pushGrafana(data);
-  } catch (e) {}
-
+  const _data = data;
   const { population, rooms, flags, tasks, power, leaderboard, stats } = data.stats;
   const { tick, cpu, gcl, market } = stats;
 
@@ -64,15 +61,21 @@ module.exports = function(data) {
     graphData.rooms[roomName].deltas = buildGarph(`rooms.${roomName}.deltas`, delta);
   });
 
-  db.defaults({ stats: {}, graph: {}, count: 0 }).write();
+  db.defaults({ stats: {}, graph: {}, count: 0, time: 0 }).write();
 
   db.set('stats', statsData).write();
 
   db.set('graph', graphData).write();
 
+  db.set('time', Date.now()).write();
+
   db.update('count', n => n + 1).write();
 
   console.log(`[${moment().format('hh:mm:ss')}]`, 'save memory data');
+
+  try {
+    pushGrafana(_data);
+  } catch (e) {}
 };
 
 function buildGarph(path, value) {
