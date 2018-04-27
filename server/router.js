@@ -3,18 +3,18 @@ const router = express.Router();
 const FileSync = require('lowdb/adapters/FileSync');
 const lowdb = require('lowdb');
 const path = require('path');
-const db = lowdb(new FileSync(path.resolve('db.json')));
 
 router.get('(/api)?/', function(req, res, next) {
-  const all = db.get('count').value();
+  const db = lowdb(new FileSync(path.resolve('db.json')));
   res.json({
     err: 0,
     msg: '',
-    data: all,
+    data: db.get('count').value(),
   });
 });
 
 router.get('(/api)?/stats', (req, res, next) => {
+  const db = lowdb(new FileSync(path.resolve('db.json')));
   res.json({
     err: 0,
     msg: '',
@@ -23,6 +23,7 @@ router.get('(/api)?/stats', (req, res, next) => {
 });
 
 router.get('(/api)?/stats/*', (req, res, next) => {
+  const db = lowdb(new FileSync(path.resolve('db.json')));
   const url = req.url
     .toString()
     .replace(/^\//, '')
@@ -35,6 +36,7 @@ router.get('(/api)?/stats/*', (req, res, next) => {
 });
 
 router.get('(/api)?/graph', (req, res, next) => {
+  const db = lowdb(new FileSync(path.resolve('db.json')));
   res.json({
     err: 0,
     msg: '',
@@ -43,6 +45,7 @@ router.get('(/api)?/graph', (req, res, next) => {
 });
 
 router.get('(/api)?/graph/*', (req, res, next) => {
+  const db = lowdb(new FileSync(path.resolve('db.json')));
   const url = req.url
     .toString()
     .replace(/^\//, '')
