@@ -1,3 +1,6 @@
+import _ from 'lodash';
+import moment from 'moment';
+
 export function formatNumber(num, cent = 2) {
   return num.toFixed(cent).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 }
@@ -10,4 +13,11 @@ export function shortNumber(number, cent = 1) {
   if (ld < 3) return (number / 1000000).toFixed(cent) + 'M';
   if (ld < 4) return (number / 1000000000).toFixed(cent) + 'B';
   return number.toString();
+}
+
+export function updateDate(deltas, progress, progressTotal) {
+  const NextTime =
+    Math.floor((progressTotal - progress) / (_.sum(deltas) / deltas.length / 60) * 1000) +
+    Date.now();
+  return moment(NextTime).fromNow();
 }

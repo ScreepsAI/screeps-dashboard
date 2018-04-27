@@ -1,0 +1,28 @@
+.box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+.out {
+  z-index: 1;
+}
+.badge {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  > img {
+    transform: scale(0.75);
+  }
+}
+.inner {
+  z-index: 3;
+}

@@ -22,3 +22,10 @@ $size: 4rem;
   font-weight: 800;
   font-size: 1.8rem;
 }
+.small {
+  transform: scale(0.75);
+}
+
+.fixWidth {
+  min-width: 6.5rem;
+}

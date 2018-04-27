@@ -19,6 +19,7 @@ const app = dva({
 app.use(createLoading());
 
 // 3. Model
+app.model(require('./models/global').default);
 app.model(require('./models/memory').default);
 app.model(require('./models/graph').default);
 app.model(require('./models/badge').default);

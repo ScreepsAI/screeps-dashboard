@@ -1,0 +1,38 @@
+@import 'import';
+.roomView {
+  margin-top: 1rem;
+  background: rgba(#333, 0.2);
+  box-shadow: 0 4px 8px rgba(#000, 0.2);
+}
+.header {
+  padding: 0.5rem 1rem;
+  background: rgba(#333, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .right {
+    display: flex;
+    > div {
+      margin-left: -1rem;
+    }
+  }
+}
+.body {
+  padding: 1rem;
+}
+.rcl {
+  display: flex;
+  align-items: center;
+  > .progress {
+    margin-left: 1rem;
+    a {
+      font-weight: 600;
+      text-shadow: 0 2px 4px rgba(#000, 0.2);
+    }
+    .desc {
+      margin-top: 0.2rem;
+      font-size: 0.8rem;
+      color: #c2c2c2;
+    }
+  }
+}
