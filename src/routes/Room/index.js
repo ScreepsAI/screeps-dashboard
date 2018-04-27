@@ -3,7 +3,8 @@ import style from './index.scss';
 import { Svg, Box } from '../../components';
 import { updateDate } from '../../utils';
 import { Progress } from 'antd';
-
+import createF2 from 'f2react';
+import _ from 'lodash';
 export class Room extends Component {
   constructor(props) {
     super();
@@ -15,7 +16,18 @@ export class Room extends Component {
   rcl = () => {
     const { controller } = this.memory;
     let progress;
+    let chart;
     if (this.graph.level < 8) {
+      const data = [];
+      _.forEach(this.graph.deltas, (value, index) => data.push({ x: index, y: value }));
+      const Line = createF2(chart => {
+        chart.line().position('x*y');
+        chart.axis(false);
+        chart.render();
+      });
+
+      chart = <Line width={200} height={72} data={data} />;
+
       const rclProgress = controller.progress / controller.progressTotal * 100;
       const rclTime = updateDate(this.graph.deltas, this.graph.progress, this.graph.progressTotal);
       progress = [
@@ -40,6 +52,7 @@ export class Room extends Component {
           </a>
           {progress}
         </div>
+        {chart}
       </div>
     );
   };
@@ -50,13 +63,18 @@ export class Room extends Component {
         <div className={style.header}>
           {this.rcl()}
           <div className={style.right}>
-            <Box title="rcl" value={this.memory.RCL} color={['#baffe1', '#62e6ac']} circle small />
+            <Box
+              title="rcl"
+              value={this.memory.RCL}
+              color={['rgb(98, 230, 172)', 'rgba(98, 230, 172, .5)']}
+              circle
+              small
+            />
             {this.memory.storage.store > 0 ? (
               <Box
                 title="storage"
                 value={this.memory.storage.store}
-                color={['#ffe3b1', '#ffc96b']}
-                fixWidth
+                color={['rgb(255, 201, 107)', 'rgba(255, 201, 107, .5)']}
                 small
               />
             ) : (
@@ -66,8 +84,7 @@ export class Room extends Component {
               <Box
                 title="terminal"
                 value={this.memory.terminal.store}
-                color={['#ae81ff', '#ae81ff']}
-                fixWidth
+                color={['rgb(174, 129, 255)', 'rgba(174, 129, 255, .5)']}
                 small
               />
             ) : (

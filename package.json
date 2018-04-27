@@ -47,12 +47,14 @@
     "Android >= 4"
   ],
   "dependencies": {
+    "@antv/f2": "^3.1.4-beta.2",
     "antd": "^3.1.0",
     "babel-runtime": "^6.9.2",
     "classnames": "^2.2.5",
     "dva": "^2.1.0",
     "dva-loading": "^1.0.4",
     "express": "^4.16.3",
+    "f2react": "^1.0.7",
     "fs-extra": "^5.0.0",
     "history": "^4.7.2",
     "lowdb": "^1.0.0",

@@ -14,6 +14,9 @@
     display: flex;
     > div {
       margin-left: -1rem;
+      &:first-child {
+        margin-right: 0.25rem;
+      }
     }
   }
 }
