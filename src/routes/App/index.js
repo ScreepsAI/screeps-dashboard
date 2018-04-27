@@ -33,7 +33,7 @@ class App extends Component {
                 <Progress
                   percent={(memory.gcl.progress / memory.gcl.progressTotal * 100).toFixed(1)}
                 />
-                <span>{_.sum(graph.gcl.delta) / graph.gcl.delta.length}</span>
+                <span>{_.sum(graph.gcl.deltas) / graph.gcl.deltas.length}</span>
               </div>
             </div>
           </div>

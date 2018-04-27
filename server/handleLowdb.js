@@ -12,70 +12,77 @@ const config = require('./config.json');
 
 module.exports = function(data) {
   const _data = data;
-  const { population, rooms, flags, tasks, power, leaderboard, stats } = data.stats;
-  const { tick, cpu, gcl, market } = stats;
-
-  _.forEach(population, creep => {
-    const homeRoom = rooms[creep.homeRoom];
-    if (!homeRoom) return;
-    if (!homeRoom.creeps) homeRoom.creeps = {};
-    if (!homeRoom.creeps[creep.creepType]) homeRoom.creeps[creep.creepType] = [];
-    homeRoom.creeps[creep.creepType].push(creep);
-  });
-
-  _.merge(rooms, stats.rooms);
-  _.assign(gcl, { power });
-
-  const statsData = { tick, rooms, flags, tasks, gcl, leaderboard, market };
-
-  const oldGclProgress = db.get(`graph.gcl.progress`).value() || gcl.progress;
-  const glcDelta = gcl.progress - oldGclProgress;
-  const gclGraph = {
-    progress: gcl.progress,
-    progressTotal: gcl.progressTotal,
-    deltas: buildGarph(`gcl.deltas`, glcDelta),
-  };
-
-  const cpuGraph = {
-    limit: cpu.limit,
-    used: buildGarph('cpu.used', cpu.used),
-    bucket: buildGarph('cpu.bucket', cpu.bucket),
-  };
-
-  const graphData = {
-    gcl: gclGraph,
-    cpu: cpuGraph,
-    rooms: {},
-  };
-
-  _.forEach(rooms, (room, roomName) => {
-    if (!room.RCL || !room.controller) return delete rooms[roomName];
-    const controller = room.controller;
-    graphData.rooms[roomName] = {};
-    graphData.rooms[roomName].level = controller.level;
-    if (controller.level === 8) return;
-    graphData.rooms[roomName].progressTotal = controller.progressTotal;
-    graphData.rooms[roomName].progress = controller.progress;
-    const oldProgress = db.get(`graph.rooms.${roomName}.progress`).value() || controller.progress;
-    const delta = controller.progress - oldProgress;
-    graphData.rooms[roomName].deltas = buildGarph(`rooms.${roomName}.deltas`, delta);
-  });
-
-  db.defaults({ stats: {}, graph: {}, count: 0, time: 0 }).write();
-
-  db.set('stats', statsData).write();
-
-  db.set('graph', graphData).write();
-
-  db.set('time', Date.now()).write();
-
-  db.update('count', n => n + 1).write();
-
-  console.log(`[${moment().format('hh:mm:ss')}]`, 'save memory data');
-
   try {
+    console.log(`[${moment().format('hh:mm:ss')}]`, 'lowdb start');
+    const { population, rooms, flags, tasks, power, leaderboard, stats } = data.stats;
+    const { tick, cpu, gcl, market } = stats;
+
+    _.forEach(population, creep => {
+      const homeRoom = rooms[creep.homeRoom];
+      if (!homeRoom) return;
+      if (!homeRoom.creeps) homeRoom.creeps = {};
+      if (!homeRoom.creeps[creep.creepType]) homeRoom.creeps[creep.creepType] = [];
+      homeRoom.creeps[creep.creepType].push(creep);
+    });
+
+    _.merge(rooms, stats.rooms);
+    _.assign(gcl, { power });
+
+    const statsData = { tick, rooms, flags, tasks, gcl, leaderboard, market };
+
+    const oldGclProgress = db.get(`graph.gcl.progress`).value() || gcl.progress;
+    const glcDelta = gcl.progress - oldGclProgress;
+    const gclGraph = {
+      progress: gcl.progress,
+      progressTotal: gcl.progressTotal,
+      deltas: buildGarph(`gcl.deltas`, glcDelta),
+    };
+
+    const cpuGraph = {
+      limit: cpu.limit,
+      used: buildGarph('cpu.used', cpu.used),
+      bucket: buildGarph('cpu.bucket', cpu.bucket),
+    };
+
+    const graphData = {
+      gcl: gclGraph,
+      cpu: cpuGraph,
+      rooms: {},
+    };
+
+    _.forEach(rooms, (room, roomName) => {
+      if (!room.RCL || !room.controller) return delete rooms[roomName];
+      const controller = room.controller;
+      graphData.rooms[roomName] = {};
+      graphData.rooms[roomName].level = controller.level;
+      if (controller.level === 8) return;
+      graphData.rooms[roomName].progressTotal = controller.progressTotal;
+      graphData.rooms[roomName].progress = controller.progress;
+      const oldProgress = db.get(`graph.rooms.${roomName}.progress`).value() || controller.progress;
+      const delta = controller.progress - oldProgress;
+      graphData.rooms[roomName].deltas = buildGarph(`rooms.${roomName}.deltas`, delta);
+    });
+
+    db.defaults({ stats: {}, graph: {}, count: 0, time: 0 }).write();
+
+    db.set('stats', statsData).write();
+
+    db.set('graph', graphData).write();
+
+    db.set('time', Date.now()).write();
+
+    db.update('count', n => n + 1).write();
+
+    console.log(`[${moment().format('hh:mm:ss')}]`, 'save memory data');
+  } catch (e) {
+    console.log(['error'], e);
+  }
+  try {
+    console.log(`[${moment().format('hh:mm:ss')}]`, 'pushGrafana start');
     pushGrafana(_data);
-  } catch (e) {}
+  } catch (e) {
+    console.log(['error'], e);
+  }
 };
 
 function buildGarph(path, value) {
