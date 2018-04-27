@@ -14,7 +14,8 @@
     "build": "cross-env DISABLE_ESLINT=true roadhog build",
     "start:server": "cd server && yarn start",
     "lint": "lint-staged",
-    "lint:es": "eslint --fix --ext .js src"
+    "lint:es": "eslint --fix --ext .js src",
+    "lint:server": "eslint --fix --ext .js server"
   },
   "pre-commit": [
     "lint"

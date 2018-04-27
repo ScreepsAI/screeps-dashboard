@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { connect } from 'dva';
 import { Spin, Progress } from 'antd';
 import { View, Header, Badge, Box } from '../../components';
+import _ from 'lodash';
 
 const State = ({ memory, graph, loading }) => {
   return {
@@ -32,7 +33,7 @@ class App extends Component {
                 <Progress
                   percent={(memory.gcl.progress / memory.gcl.progressTotal * 100).toFixed(1)}
                 />
-                <span>{}</span>
+                <span>{_.sum(graph.gcl.progress) / graph.gcl.progress.length}</span>
               </div>
             </div>
           </div>

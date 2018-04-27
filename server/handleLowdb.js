@@ -29,9 +29,12 @@ module.exports = function(data) {
 
   const statsData = { tick, rooms, flags, tasks, gcl, leaderboard, market };
 
+  const oldGclProgress = db.get(`graph.gcl.progress`).value();
+  const glcDelta = gcl.progress.progress - oldGclProgress;
   const gclGraph = {
-    progress: buildGarph('gcl.progress', gcl.progress),
+    progress: gcl.progress,
     progressTotal: gcl.progressTotal,
+    delta: buildGarph(`gcl.deltas`, glcDelta),
   };
 
   const cpuGraph = {
