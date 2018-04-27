@@ -11,7 +11,9 @@ const db = lowdb(new FileSync(path.resolve('db.json')), {
 const config = require('./config.json');
 
 module.exports = function(data) {
-  pushGrafana(data);
+  try {
+    pushGrafana(data);
+  } catch (e) {}
 
   const { population, rooms, flags, tasks, power, leaderboard, stats } = data.stats;
   const { tick, cpu, gcl, market } = stats;
@@ -29,8 +31,8 @@ module.exports = function(data) {
 
   const statsData = { tick, rooms, flags, tasks, gcl, leaderboard, market };
 
-  const oldGclProgress = db.get(`graph.gcl.progress`).value();
-  const glcDelta = gcl.progress.progress - oldGclProgress;
+  const oldGclProgress = db.get(`graph.gcl.progress`).value() || gcl.progress;
+  const glcDelta = gcl.progress - oldGclProgress;
   const gclGraph = {
     progress: gcl.progress,
     progressTotal: gcl.progressTotal,
