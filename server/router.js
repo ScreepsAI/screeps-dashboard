@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const FileSync = require('lowdb/adapters/FileSync');
 const lowdb = require('lowdb');
 const path = require('path');
-const db = lowdb(new FileSync(path.resolve('db.json')), {
-  autosave: false,
-  async: true,
-});
+const db = lowdb(path.resolve('db.json'));
 
 router.get('(/api)?/', function(req, res, next) {
   res.json({
