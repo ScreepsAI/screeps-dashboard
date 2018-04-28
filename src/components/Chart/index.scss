@@ -1,0 +1,19 @@
+@import 'import';
+$size: 4rem;
+.box {
+  height: $size;
+  text-align: center;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 8px rgba(#000, 0.2);
+  position: relative;
+  border: 0.4rem solid;
+  display: flex;
+  > canvas {
+    height: 100% !important;
+    width: 100% !important;
+  }
+}
+
+.small {
+  transform: scale(0.75);
+}

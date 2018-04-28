@@ -21,11 +21,11 @@
   flex: 1;
 }
 .badge {
-  border: 0.3rem solid #fff;
+  border: 0.3rem solid rgba(#fff, 0.2);
   box-shadow: 0 4px 8px rgba(#000, 0.5);
 }
 .avatarContent {
-  margin-left: 1rem;
+  margin-left: 1.5rem;
 }
 .username {
   color: $c-font-yellow;

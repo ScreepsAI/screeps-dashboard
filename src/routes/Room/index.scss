@@ -21,21 +21,122 @@
   }
 }
 .body {
-  padding: 1rem;
+  padding: 0.8rem 0;
+  > div {
+    padding: 0.8rem 1rem;
+  }
 }
-.rcl {
+.title {
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(#000, 0.2);
+}
+.desc {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  color: #c2c2c2;
+}
+.left {
   display: flex;
   align-items: center;
-  > .progress {
+  color: #eee;
+}
+.content {
+  margin-left: 1rem;
+}
+.storage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .list {
     margin-left: 1rem;
-    a {
-      font-weight: 600;
-      text-shadow: 0 2px 4px rgba(#000, 0.2);
-    }
-    .desc {
-      margin-top: 0.2rem;
-      font-size: 0.8rem;
-      color: #c2c2c2;
+    display: flex;
+  }
+}
+.resCell {
+  margin-right: 0.2rem;
+  min-width: 3rem;
+  > div {
+    height: 1.5rem;
+    padding: 0.2rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .value {
+    border-radius: 0.2rem;
+    color: #999;
+    background: rgba(#000, 0.2);
+    font-size: 0.8rem;
+    font-family: $font-code;
+  }
+}
+.order {
+  display: flex;
+  justify-content: space-between;
+
+  .title {
+    font-size: 0.95rem;
+  }
+  .orderList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    color: #999;
+    width: 100%;
+    > div {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0.5rem;
+      > span {
+        margin-left: 0.5rem;
+        color: #eee;
+        font-family: $font-code;
+      }
     }
   }
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(#000, 0.2);
+    flex: 1;
+    flex-direction: column;
+    + div {
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+.creep {
+  display: flex;
+  flex-wrap: wrap;
+}
+.roleBox {
+  flex: 1;
+  box-shadow: 0 4px 24px rgba(#000, 0.2);
+  padding: 1rem;
+  flex-direction: column;
+  display: flex;
+  .title {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  + .roleBox {
+    margin-left: 0.5rem;
+  }
+}
+.creepBox {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
 }

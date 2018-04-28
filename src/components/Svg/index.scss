@@ -1,3 +1,4 @@
+@import 'import';
 .box {
   position: relative;
   display: flex;
@@ -21,6 +22,20 @@
   justify-content: center;
   > img {
     transform: scale(0.75);
+  }
+}
+.tooltip {
+  font-size: 0.8rem;
+  > div + div {
+    margin-top: 0.5rem;
+    span {
+      color: $c-primary;
+      font-weight: 600;
+    }
+  }
+  span {
+    color: $c-font-yellow;
+    font-weight: 600;
   }
 }
 .inner {

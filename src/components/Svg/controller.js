@@ -1,11 +1,14 @@
-import style from './controller.scss';
-const Badge = localStorage.getItem('badgeImg');
-
+import style from './index.scss';
+import { formatNumber } from '../../utils/index';
+import { Badge } from '../';
+import { Tooltip } from 'antd';
+import _ from 'lodash';
 export default ({
   content = {
     level: 1,
     progress: 50,
     progressTotal: 200,
+    deltas: [0],
   },
   size = 60,
 }) => {
@@ -74,17 +77,36 @@ export default ({
     const END_Y =
       19 *
       Math.sin(-Math.PI * 2 * (content.progressTotal - content.progress) / content.progressTotal);
+
+    const tooltipText = (
+      <div className={style.tooltip}>
+        <div>
+          Progress:{' '}
+          <span>
+            {[formatNumber(content.progress, 0), formatNumber(content.progressTotal, 0)].join(
+              ' / '
+            )}
+          </span>
+        </div>
+        <div>
+          Speed:{' '}
+          <span>{Math.floor(_.sum(content.deltas) / content.deltas.length / 60 * 3)} E/Tick</span>
+        </div>
+      </div>
+    );
     innerSvg = (
-      <svg height={size} width={size} viewBox="-100 -100 200 200">
-        <path
-          fill="transparent"
-          strokeOpacity="0.4"
-          strokeWidth="38"
-          stroke="#FFFFFF"
-          transform="rotate(-90)"
-          d={`M 19 0 A 19 19 0 ${LARGE_ARC_FLAG} 1 ${END_X} ${END_Y}`}
-        />
-      </svg>
+      <Tooltip placement="topLeft" title={tooltipText}>
+        <svg height={size} width={size} viewBox="-100 -100 200 200">
+          <path
+            fill="transparent"
+            strokeOpacity="0.4"
+            strokeWidth="38"
+            stroke="#FFFFFF"
+            transform="rotate(-90)"
+            d={`M 19 0 A 19 19 0 ${LARGE_ARC_FLAG} 1 ${END_X} ${END_Y}`}
+          />
+        </svg>
+      </Tooltip>
     );
   }
 
@@ -111,7 +133,7 @@ export default ({
     <div className={style.box} style={{ width: size, height: size }}>
       <div className={style.out}>{outSvg}</div>
       <div className={style.badge}>
-        <img src={Badge} width={size / 2} />
+        <Badge size={size / 3} />
       </div>
       <div className={style.inner}>{innerSvg}</div>
     </div>

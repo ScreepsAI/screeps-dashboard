@@ -2,7 +2,9 @@ import _ from 'lodash';
 import moment from 'moment';
 
 export function formatNumber(num, cent = 2) {
-  return num.toFixed(cent).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  num = cent > 0 ? num.toFixed(cent) : num + '.';
+  num = num.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+  return cent > 0 ? num : num.replace(/\./g, '');
 }
 
 export function shortNumber(number, cent = 1) {

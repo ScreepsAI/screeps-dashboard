@@ -1,6 +1,6 @@
 import request from '../utils/request';
 import _ from 'lodash';
-import renderBadge from '../utils/renderBadge';
+
 export default {
   namespace: 'badge',
 
@@ -21,7 +21,6 @@ export default {
         try {
           let Data = yield call(() => request(`https://screepspl.us/api/badge/${USERNAME}.json`));
           Data = Data.data;
-          localStorage.setItem('badgeImg', renderBadge(Data, 250).toDataURL('image/png'));
           localStorage.setItem('badge', JSON.stringify(Data));
           yield put({ type: 'queryBadgeSuccess', payload: Data });
           console.log('querry new badge');

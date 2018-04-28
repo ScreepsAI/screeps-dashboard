@@ -15,6 +15,9 @@ div {
 }
 
 :global {
+  .ant-tooltip-inner {
+    min-height: auto;
+  }
   .ant-progress > div {
     display: flex;
     align-items: center;
