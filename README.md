@@ -1,6 +1,6 @@
 # <img src="https://raw.githubusercontent.com/stybbe/Screeps-SC/master/icons/icon48.png" width="24"> Screeps Dashboard
 
-[![GitHub release](https://img.shields.io/badge/Dashboard%20for%20Screeps-blue.svg?colorB=308ADF)](http://bit.ly/SketchRunnerWebsite)
+[![](https://img.shields.io/badge/Dashboard%20for-Screeps-brightgreen.svg)](http://screeps.canisminor.cc/)
 
 Dashboard for [screeps.com](https://screeps.com/). View [online demo](http://screeps.canisminor.cc/)
 
