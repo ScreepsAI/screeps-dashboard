@@ -7,6 +7,7 @@
 ## Preview
 
 ![](https://raw.githubusercontent.com/canisminor1990/screeps-dashboard/master/preview.png)
+![](https://raw.githubusercontent.com/canisminor1990/screeps-dashboard/master/preview-mobile.png)
 
 ## Usage
 
