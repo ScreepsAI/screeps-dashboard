@@ -1,19 +1,27 @@
 import style from './index.scss';
+import Badge from './badge';
 import _ from 'lodash';
 
 export default ({
   content = {
     body: { move: 1 },
   },
+  badge,
   size = 32,
   scale = 0.8,
+  bodyBox = false,
+  array = false,
 }) => {
   const _size = size;
   size = size * scale;
   let parts = [];
-  _.forEach(content.body, (v, k) => {
-    if (k !== 'carry') parts = parts.concat(_.fill(Array(v), k));
-  });
+  if (!array) {
+    _.forEach(content.body, (v, k) => {
+      if (k !== 'carry') parts = parts.concat(_.fill(Array(v), k));
+    });
+  } else {
+    parts = _.filter(content.body, v => v !== 'carry');
+  }
 
   const PART_COLOURS = {
     carry: undefined,
@@ -25,6 +33,12 @@ export default ({
     heal: '#65FD62',
     tough: '#858585',
   };
+
+  if (bodyBox) {
+    const Body = [];
+    _.forEach(parts, (p, i) => Body.push(<div key={i} style={{ background: PART_COLOURS[p] }} />));
+    return <div className={style.bodybox}>{Body}</div>;
+  }
 
   const BORDER_COLOUR = '#202020';
   const INTERNAL_COLOUR = '#555555';
@@ -66,6 +80,7 @@ export default ({
     const endAngle = centerAngle + arcLength / 2;
     return (
       <path
+        key={partType}
         d={describeArc(CENTER_X, CENTER_Y, RADIUS, startAngle, endAngle)}
         fill="none"
         stroke={PART_COLOURS[partType]}
@@ -110,6 +125,7 @@ export default ({
   let partsRender = [];
   arcs.reverse().forEach(arc => partsRender.push(arc));
 
+  const BADGE_SCALE = 0.23;
   return (
     <div className={style.box} style={{ width: _size, height: _size }}>
       <svg width={size} height={size} viewBox="0 0 48 48">
@@ -128,6 +144,12 @@ export default ({
           stroke={BORDER_COLOUR}
           strokeWidth={BORDER_WIDTH}
         />
+        <g
+          transform={`translate(${24 - 48 * BADGE_SCALE}, ${24 -
+            48 * BADGE_SCALE}) scale(${BADGE_SCALE})`}
+        >
+          <Badge content={badge} svg={false} />
+        </g>
         {partsRender}
       </svg>
     </div>

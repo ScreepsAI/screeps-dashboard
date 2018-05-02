@@ -1,15 +1,13 @@
 import style from './index.scss';
-import { formatNumber } from '../../utils/index';
-import { Badge } from '../';
-import { Tooltip } from 'antd';
-import _ from 'lodash';
+import Badge from './badge';
+
 export default ({
   content = {
     level: 1,
     progress: 50,
     progressTotal: 200,
-    deltas: [0],
   },
+  badge,
   size = 60,
 }) => {
   const START_X = 80 * Math.cos(Math.PI / 8);
@@ -53,21 +51,6 @@ export default ({
     DEST_G_Y,
   ].join(' ');
 
-  const outSvg = (
-    <svg height={size} width={size} viewBox="-100 -100 200 200">
-      <path
-        fill="#FFFFFF"
-        fillOpacity="0.1"
-        transform="scale(1.2 1.2)"
-        d={`M ${START_X} ${START_Y} L ${DEST} Z`}
-      />
-      <path fill="#0A0A0A" d={`M ${START_X} ${START_Y} L ${DEST} Z`} />
-      <path fill="#CCCCCC" paintOrder="fill" strokeWidth="6" stroke="#0A0A0A" d={getLevelsPath()} />
-      <ellipse cx="0" cy="0" fill="#222222" rx="37" ry="37" />
-      <ellipse cx="0" cy="0" fill="transparent" rx="40" ry="40" strokeWidth="10" stroke="#080808" />
-    </svg>
-  );
-
   let innerSvg;
   if (content.level < 8) {
     const LARGE_ARC_FLAG = content.progress < content.progressTotal / 2 ? 0 : 1;
@@ -77,65 +60,76 @@ export default ({
     const END_Y =
       19 *
       Math.sin(-Math.PI * 2 * (content.progressTotal - content.progress) / content.progressTotal);
-
-    const tooltipText = (
-      <div className={style.tooltip}>
-        <div>
-          Progress:{' '}
-          <span>
-            {[formatNumber(content.progress, 0), formatNumber(content.progressTotal, 0)].join(
-              ' / '
-            )}
-          </span>
-        </div>
-        <div>
-          Speed:{' '}
-          <span>{Math.floor(_.sum(content.deltas) / content.deltas.length / 60 * 3)} E/Tick</span>
-        </div>
-      </div>
-    );
     innerSvg = (
-      <Tooltip placement="topLeft" title={tooltipText}>
-        <svg height={size} width={size} viewBox="-100 -100 200 200">
-          <path
-            fill="transparent"
-            strokeOpacity="0.4"
-            strokeWidth="38"
-            stroke="#FFFFFF"
-            transform="rotate(-90)"
-            d={`M 19 0 A 19 19 0 ${LARGE_ARC_FLAG} 1 ${END_X} ${END_Y}`}
-          />
-        </svg>
-      </Tooltip>
+      <path
+        fill="transparent"
+        strokeOpacity="0.4"
+        strokeWidth="38"
+        stroke="#FFFFFF"
+        transform="rotate(-90)"
+        d={`M 19 0 A 19 19 0 ${LARGE_ARC_FLAG} 1 ${END_X} ${END_Y}`}
+      />
     );
   }
-
-  function getLevelsPath() {
-    const initial = 'M 0 0 L -28.70125742738173 -69.2909649383465';
-    const segments = [
-      'L 28.701257427381737 -69.2909649383465 Z',
-      'M 0 0 L 28.701257427381737 -69.2909649383465 L 69.2909649383465 -28.701257427381734 Z',
-      'M 0 0 L 69.2909649383465 -28.701257427381734 L 69.2909649383465 28.701257427381734 Z',
-      'M 0 0 L 69.2909649383465 28.701257427381734 L 28.701257427381737 69.2909649383465 Z',
-      'M 0 0 L 28.701257427381737 69.2909649383465 L -28.70125742738173 69.2909649383465 Z',
-      'M 0 0 L -28.70125742738173 69.2909649383465 L -69.2909649383465 28.70125742738174 Z',
-      'M 0 0 L -69.2909649383465 28.70125742738174 L -69.29096493834652 -28.701257427381726 Z',
-      'M 0 0 L -69.29096493834652 -28.701257427381726 L -28.701257427381776 -69.29096493834649 Z',
-    ];
-    let path = initial + ' ';
-    for (let i = 0; i < content.level; i++) {
-      path += segments[i] + ' ';
-    }
-    return path;
+  const BADGE_SCALE = 0.8;
+  if (content.level < 8) {
   }
-
   return (
     <div className={style.box} style={{ width: size, height: size }}>
-      <div className={style.out}>{outSvg}</div>
-      <div className={style.badge}>
-        <Badge size={size / 3} />
-      </div>
-      <div className={style.inner}>{innerSvg}</div>
+      <svg height={size} width={size} viewBox="0 0 200 200">
+        <g transform="translate(100,100)">
+          <path
+            fill="#FFFFFF"
+            fillOpacity="0.1"
+            transform="scale(1.2 1.2)"
+            d={`M ${START_X} ${START_Y} L ${DEST} Z`}
+          />
+          <path fill="#0A0A0A" d={`M ${START_X} ${START_Y} L ${DEST} Z`} />
+          <path
+            fill="#CCCCCC"
+            paintOrder="fill"
+            strokeWidth="6"
+            stroke="#0A0A0A"
+            d={getLevelsPath(content.level)}
+          />
+          <ellipse cx="0" cy="0" fill="#222222" rx="37" ry="37" />
+          <ellipse
+            cx="0"
+            cy="0"
+            fill="transparent"
+            rx="40"
+            ry="40"
+            strokeWidth="10"
+            stroke="#080808"
+          />
+          <g
+            transform={`translate(${-50 * BADGE_SCALE}, ${-50 *
+              BADGE_SCALE}) scale(${BADGE_SCALE})`}
+          >
+            <Badge content={badge} svg={false} />
+          </g>
+          {innerSvg}
+        </g>
+      </svg>
     </div>
   );
 };
+
+function getLevelsPath(level) {
+  const initial = 'M 0 0 L -28.70125742738173 -69.2909649383465';
+  const segments = [
+    'L 28.701257427381737 -69.2909649383465 Z',
+    'M 0 0 L 28.701257427381737 -69.2909649383465 L 69.2909649383465 -28.701257427381734 Z',
+    'M 0 0 L 69.2909649383465 -28.701257427381734 L 69.2909649383465 28.701257427381734 Z',
+    'M 0 0 L 69.2909649383465 28.701257427381734 L 28.701257427381737 69.2909649383465 Z',
+    'M 0 0 L 28.701257427381737 69.2909649383465 L -28.70125742738173 69.2909649383465 Z',
+    'M 0 0 L -28.70125742738173 69.2909649383465 L -69.2909649383465 28.70125742738174 Z',
+    'M 0 0 L -69.2909649383465 28.70125742738174 L -69.29096493834652 -28.701257427381726 Z',
+    'M 0 0 L -69.29096493834652 -28.701257427381726 L -28.701257427381776 -69.29096493834649 Z',
+  ];
+  let path = initial + ' ';
+  for (let i = 0; i < level; i++) {
+    path += segments[i] + ' ';
+  }
+  return path;
+}

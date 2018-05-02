@@ -13,6 +13,7 @@ $size: 4rem;
   padding: 0;
   border-radius: 100%;
   width: $size;
+  min-width: $size;
 }
 .title {
   font-size: 0.7rem;

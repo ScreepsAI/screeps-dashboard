@@ -3,6 +3,9 @@
   margin-top: 1rem;
   background: rgba(#333, 0.2);
   box-shadow: 0 4px 8px rgba(#000, 0.2);
+  @include media($m-middle) {
+    box-shadow: 0 4px 24px rgba(#000, 0.1);
+  }
 }
 .header {
   padding: 0.5rem 1rem;
@@ -10,12 +13,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @include media($m-middle) {
+    flex-direction: column;
+    .left {
+      padding: 0.5rem 0;
+    }
+  }
   .right {
     display: flex;
     > div {
       margin-left: -1rem;
       &:first-child {
         margin-right: 0.25rem;
+      }
+    }
+    @include media($m-middle) {
+      .rclChart {
+        display: none;
+      }
+      > div {
+        margin: 0 !important;
       }
     }
   }
@@ -47,14 +64,34 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @include media($m-middle) {
+    flex-direction: column;
+
+    &:first-child {
+      border-bottom: 1px solid rgba(#fff, 0.05);
+    }
+  }
   .list {
     margin-left: 1rem;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    @include media($m-middle) {
+      margin-left: 0;
+      margin-top: 1rem;
+    }
   }
 }
 .resCell {
-  margin-right: 0.2rem;
   min-width: 3rem;
+  + .resCell {
+    margin-left: 0.2rem;
+  }
+  @include media($m-middle) {
+    min-width: 4rem;
+    margin-bottom: 0.5rem;
+  }
   > div {
     height: 1.5rem;
     padding: 0.2rem 0.5rem;
@@ -73,7 +110,13 @@
 .order {
   display: flex;
   justify-content: space-between;
-
+  @include media($m-middle) {
+    flex-direction: column;
+    margin: 0 -1rem;
+    > div {
+      margin: 0 !important;
+    }
+  }
   .title {
     font-size: 0.95rem;
   }
@@ -113,17 +156,24 @@
     }
   }
 }
-
 .creep {
   display: flex;
   flex-wrap: wrap;
+  @include media($m-middle) {
+    padding: 0.75rem;
+  }
 }
 .roleBox {
+  background: rgba(#fff, 0.02);
   flex: 1;
   box-shadow: 0 4px 24px rgba(#000, 0.2);
   padding: 1rem;
   flex-direction: column;
   display: flex;
+  @include media($m-middle) {
+    min-width: 30%;
+    margin: 0.25rem !important;
+  }
   .title {
     font-size: 0.8rem;
     text-align: center;
@@ -139,4 +189,50 @@
   justify-content: center;
   align-items: center;
   flex: 1;
+}
+.tooltip {
+  font-size: 0.8rem;
+  > div + div {
+    margin-top: 0.5rem;
+    span {
+      color: $c-primary;
+      font-weight: 600;
+    }
+  }
+  span {
+    color: $c-font-yellow;
+    font-weight: 600;
+  }
+}
+.creepTooltip {
+  font-size: 0.8rem;
+  color: #999;
+  > div + div {
+    margin-top: 0.5rem;
+  }
+  span {
+    color: #fff;
+    font-weight: 600;
+  }
+  .name span {
+    color: $c-font-yellow;
+    font-weight: 600;
+  }
+  .home span {
+    color: $c-primary;
+    font-weight: 600;
+  }
+  .room span {
+    color: $c-purple;
+    font-weight: 600;
+  }
+}
+.queueBox {
+  width: 100% !important;
+  .behaviour {
+  }
+  .target {
+    font-size: 0.6rem;
+    color: #999;
+  }
 }

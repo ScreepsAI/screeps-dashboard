@@ -2,7 +2,7 @@ import { Component } from 'react';
 import style from './index.scss';
 import { Svg, Box, LineChart, Resource } from '../../components';
 import { updateDate, shortNumber, formatNumber } from '../../utils';
-import { Progress } from 'antd';
+import { Progress, Tooltip } from 'antd';
 import _ from 'lodash';
 
 export class Room extends Component {
@@ -11,45 +11,78 @@ export class Room extends Component {
     this.name = props.name;
     this.memory = props.memory;
     this.graph = props.graph;
+    this.badge = props.badge;
   }
 
   rcl = () => {
     const { controller } = this.memory;
-    let progress;
-    let chart;
+    let controllerSvg = (
+      <Svg.controller
+        badge={this.badge}
+        content={{
+          level: controller.level,
+          progress: controller.progress,
+          progressTotal: controller.progressTotal,
+          deltas: this.graph.deltas,
+        }}
+      />
+    );
+    const roomName = (
+      <a
+        className={style.title}
+        href={`https://screeps.com/a/#!/room/shard2/${this.name}`}
+        target="_blank"
+      >
+        {this.name}
+      </a>
+    );
     if (this.graph.level < 8) {
       const rclProgress = controller.progress / controller.progressTotal * 100;
       const rclTime = updateDate(this.graph.deltas, this.graph.progress, this.graph.progressTotal);
-      progress = [
+      const tooltipText = (
+        <div className={style.tooltip}>
+          <div>
+            Progress:{' '}
+            <span>
+              {[
+                formatNumber(controller.progress, 0),
+                formatNumber(controller.progressTotal, 0),
+              ].join(' / ')}
+            </span>
+          </div>
+          <div>
+            Speed:{' '}
+            <span>
+              {Math.floor(_.sum(this.graph.deltas) / this.graph.deltas.length / 60 * 3)} E/Tick
+            </span>
+          </div>
+        </div>
+      );
+      const progress = [
         <Progress key="progress" percent={rclProgress} showInfo={false} />,
         <div key="progress-time" className={style.desc}>
           {rclProgress.toFixed(1)}% Next level {rclTime}
         </div>,
       ];
-    }
-    return (
-      <div className={style.left}>
-        <Svg.controller
-          content={{
-            level: controller.level,
-            progress: controller.progress,
-            progressTotal: controller.progressTotal,
-            deltas: this.graph.deltas,
-          }}
-        />
-        <div className={style.content}>
-          <a
-            className={style.title}
-            href={`https://screeps.com/a/#!/room/shard2/${this.name}`}
-            target="_blank"
-          >
-            {this.name}
-          </a>
-          {progress}
+      return (
+        <Tooltip title={tooltipText}>
+          <div className={style.left}>
+            {controllerSvg}
+            <div className={style.content}>
+              {roomName}
+              {progress}
+            </div>
+          </div>
+        </Tooltip>
+      );
+    } else {
+      return (
+        <div className={style.left}>
+          {controllerSvg}
+          <div className={style.content}>{roomName}</div>
         </div>
-        {chart}
-      </div>
-    );
+      );
+    }
   };
 
   rclChart = () => {
@@ -67,6 +100,7 @@ export class Room extends Component {
     _.forEach(newDeltas, (value, index) => data.push({ x: index, y: value }));
     return (
       <LineChart
+        className={style.rclChart}
         data={data}
         width={120}
         color={['rgb(98, 230, 172)', 'rgba(98, 230, 172, .5)']}
@@ -95,7 +129,7 @@ export class Room extends Component {
         color = res.value > 100000 ? '#fee476' : '#FF7A7A';
       }
       List.push(
-        <div className={style.resCell}>
+        <div key={res.type} className={style.resCell}>
           <div className={style.type}>
             <Resource type={res.type} />
           </div>
@@ -150,7 +184,7 @@ export class Room extends Component {
         color = res.value > 90000 ? '#fee476' : '#FF7A7A';
       }
       List.push(
-        <div className={style.resCell}>
+        <div key={res.type} className={style.resCell}>
           <div className={style.type}>
             <Resource type={res.type} />
           </div>
@@ -187,19 +221,16 @@ export class Room extends Component {
 
   order = () => {
     const { resources } = this.memory;
-    let reaction = 'none';
-    let order = 'none';
-    let offer = 'none';
-
     const reactionData = resources.reactions ? resources.reactions.orders : [];
     const orderData = resources.orders || [];
     const offerData = resources.offers || [];
-
+    const hide = reactionData.length === 0 && orderData.length === 0 && offerData.length === 0;
     const buildList = data => {
+      if (data.length === 0) return 'none';
       let list = [];
       _.forEach(data, o =>
         list.push(
-          <div>
+          <div key={o.type}>
             <Resource type={o.type} />
             <span>{formatNumber(o.amount, 0)}</span>
           </div>
@@ -207,24 +238,20 @@ export class Room extends Component {
       );
       return list;
     };
-
-    if (reactionData.length > 0) reaction = buildList(reactionData);
-    if (orderData.length > 0) order = buildList(orderData);
-    if (offerData.length > 0) offer = buildList(offerData);
-
+    if (hide) return null;
     return (
       <div className={style.order}>
         <div>
           <div className={style.title}>REACTION</div>
-          <div className={style.orderList}>{reaction}</div>
+          <div className={style.orderList}>{buildList(reactionData)}</div>
         </div>
         <div>
           <div className={style.title}>ORDER</div>
-          <div className={style.orderList}>{order}</div>
+          <div className={style.orderList}>{buildList(orderData)}</div>
         </div>
         <div>
           <div className={style.title}>OFFER</div>
-          <div className={style.orderList}>{offer}</div>
+          <div className={style.orderList}>{buildList(offerData)}</div>
         </div>
       </div>
     );
@@ -238,23 +265,110 @@ export class Room extends Component {
       if (!list[roleName]) list[roleName] = [];
       _.forEach(role, handleCreep);
     };
-    const handleCreep = (creep, creepName) => {
-      list[creep.creepType].push(
-        <div>
-          <Svg.creep content={creep} />
+    const handleCreep = (creep, index) => {
+      const tooltipText = (
+        <div className={style.creepTooltip}>
+          <div className={style.name}>
+            Name: <span>{creep.creepName}</span>
+          </div>
+          <div className={style.room}>
+            Room: <span>{creep.roomName}</span>
+          </div>
+          <div className={style.home}>
+            Home: <span>{creep.homeRoom}</span>
+          </div>
+          <div>
+            TTL: <span>{creep.ttl}</span>
+          </div>
+          <div>
+            Weight: <span>{creep.weight}</span>
+          </div>
+          <Svg.creep content={creep} bodyBox />
         </div>
+      );
+      list[creep.creepType].push(
+        <Tooltip key={index} title={tooltipText}>
+          <div>
+            <Svg.creep content={creep} badge={this.badge} />
+          </div>
+        </Tooltip>
       );
     };
     _.forEach(creeps, handleRole);
     _.forEach(list, (l, title) =>
       List.push(
-        <div className={style.roleBox}>
+        <div key={title} className={style.roleBox}>
           <div className={style.title}>{title.toUpperCase()}</div>
           <div className={style.creepBox}>{l}</div>
         </div>
       )
     );
     return <div className={style.creep}>{List}</div>;
+  };
+
+  spawn = () => {
+    const { spawnQueueLow, spawnQueueMedium, spawnQueueHigh } = this.memory;
+    const hide =
+      spawnQueueLow.length === 0 && spawnQueueMedium.length === 0 && spawnQueueHigh.length === 0;
+    const buildList = queue => {
+      if (queue.length === 0) return 'none';
+      const list = [];
+      _.forEach(queue, creep => {
+        let destiny;
+        if (creep.destiny && creep.destiny.targetName) {
+          destiny = [
+            <div key="room" className={style.room}>
+              Room: <span>{creep.destiny.room}</span>
+            </div>,
+            <div key="target" className={style.home}>
+              Target: <span>{creep.destiny.targetName}</span>
+            </div>,
+            <div key="task">
+              Task: <span>{creep.destiny.task}</span>
+            </div>,
+          ];
+        }
+        const tooltipText = (
+          <div className={style.creepTooltip}>
+            <div className={style.name}>
+              Name: <span>{creep.name}</span>
+            </div>
+            {destiny}
+            <Svg.creep content={{ body: creep.parts }} array bodyBox />
+          </div>
+        );
+        const Name = creep.name.split('-');
+        list.push(
+          <Tooltip key={creep.name} title={tooltipText}>
+            <div className={style.queueBox}>
+              <Svg.creep content={{ body: creep.parts }} badge={this.badge} array />
+              <span>
+                <div className={style.behaviour}>{Name[0]}</div>
+                <div className={style.target}>{Name[1]}</div>
+              </span>
+            </div>
+          </Tooltip>
+        );
+      });
+      return list;
+    };
+    if (hide) return null;
+    return (
+      <div className={style.order}>
+        <div>
+          <div className={style.title}>HIGH</div>
+          <div className={style.orderList}>{buildList(spawnQueueHigh)}</div>
+        </div>
+        <div>
+          <div className={style.title}>MEDIUM</div>
+          <div className={style.orderList}>{buildList(spawnQueueMedium)}</div>
+        </div>
+        <div>
+          <div className={style.title}>LOW</div>
+          <div className={style.orderList}>{buildList(spawnQueueLow)}</div>
+        </div>
+      </div>
+    );
   };
 
   render() {
@@ -293,6 +407,7 @@ export class Room extends Component {
           {this.memory.storage.store > 0 ? this.storage() : null}
           {this.memory.terminal.store > 0 ? this.terminal() : null}
           {this.memory.resources ? this.order() : null}
+          {this.spawn()}
           {this.creep()}
         </div>
       </div>
