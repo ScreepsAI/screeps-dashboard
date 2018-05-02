@@ -18,3 +18,13 @@
     padding: 0;
   }
 }
+.footer {
+  padding: 3rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #666;
+  @include media($m-middle) {
+    flex-direction: column;
+  }
+}

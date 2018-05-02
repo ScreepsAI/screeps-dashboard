@@ -112,6 +112,22 @@ class App extends Component {
         ) : (
           this.body()
         )}
+        <View.footer>
+          <div className={style.footerLeft}>
+            © Develop by{' '}
+            <a href="https://canisminor.cc" target="__blank">
+              CanisMinor
+            </a>{' '}
+            2018
+          </div>
+          <div className={style.footerRight}>
+            View on{' '}
+            <a href="https://github.com/canisminor1990/screeps-dashboard" target="__blank">
+              Github
+            </a>{' '}
+            MIT.
+          </div>
+        </View.footer>
       </View>
     );
   }

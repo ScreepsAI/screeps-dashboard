@@ -34,7 +34,6 @@
     }
   }
 }
-
 .badge {
   border: 0.3rem solid rgba(#fff, 0.2);
   box-shadow: 0 4px 8px rgba(#000, 0.5);
@@ -95,4 +94,19 @@
     color: $c-font-yellow;
     font-weight: 600;
   }
+}
+.footerLeft,
+.footerRight {
+  font-size: 0.9rem;
+  font-family: $font-code;
+  @include media($m-middle) {
+    margin: 0.2rem;
+  }
+}
+.footerLeft a {
+  margin-left: 0.2rem;
+  color: $c-primary;
+}
+.footerRight a {
+  margin-left: 0.2rem;
 }

@@ -11,4 +11,8 @@ View.body = ({ children, className }) => (
   <div className={classnames(style.body, className)}>{children}</div>
 );
 
+View.footer = ({ children, className }) => (
+  <div className={classnames(style.footer, className)}>{children}</div>
+);
+
 export default View;

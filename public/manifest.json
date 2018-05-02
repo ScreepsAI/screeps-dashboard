@@ -1,6 +1,6 @@
 {
-    "name": "CanisMinor",
-    "short_name": "CanisMinor",
+    "name": "Screeps Dashboard",
+    "short_name": "Screeps Dashboard",
     "start_url": "/",
     "icons": [
         {
@@ -14,7 +14,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#62e6ac",
-    "background_color": "#ffffff",
+    "theme_color": "#222222",
+    "background_color": "#222222",
     "display": "standalone"
 }
