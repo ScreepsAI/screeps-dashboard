@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/badge/Dashboard%20for-Screeps-brightgreen.svg)](http://screeps.canisminor.cc/)
 
-Dashboard for [screeps.com](https://screeps.com/). View [online demo](http://screeps.canisminor.cc/)
+👀 Dashboard for [screeps.com](https://screeps.com/), view [online demo](http://screeps.canisminor.cc/).
 
 ## Preview
 
