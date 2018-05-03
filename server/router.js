@@ -61,4 +61,44 @@ router.get('(/api)?/graph/*', (req, res, next) => {
   });
 });
 
+router.get('(/api)?/username', (req, res, next) => {
+  read();
+  res.json({
+    count: db.get('count').value(),
+    time: db.get('time').value(),
+    data: db.get('username').value(),
+  });
+});
+
+router.get('(/api)?/badge', (req, res, next) => {
+  read();
+  res.json({
+    count: db.get('count').value(),
+    time: db.get('time').value(),
+    data: db.get('badge').value(),
+  });
+});
+
+router.get('(/api)?/market', (req, res, next) => {
+  read();
+  res.json({
+    count: db.get('count').value(),
+    time: db.get('time').value(),
+    data: db.get('market').value(),
+  });
+});
+
+router.get('(/api)?/market/*', (req, res, next) => {
+  read();
+  const url = req.url
+    .toString()
+    .replace(/^\//, '')
+    .replace(/\//g, '.');
+  res.json({
+    count: db.get('count').value(),
+    time: db.get('time').value(),
+    data: db.get(url).value(),
+  });
+});
+
 module.exports = router;
