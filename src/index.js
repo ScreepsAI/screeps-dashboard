@@ -23,7 +23,7 @@ app.model(require('./models/global').default);
 app.model(require('./models/memory').default);
 app.model(require('./models/graph').default);
 app.model(require('./models/badge').default);
-
+app.model(require('./models/market').default);
 // 4. Router
 app.router(router);
 

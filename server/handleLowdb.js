@@ -25,7 +25,10 @@ module.exports = function(data) {
       homeRoom.creeps[creep.creepType].push(creep);
     });
 
-    _.merge(rooms, stats.rooms);
+    _.forEach(rooms, (room, roomName) => {
+      _.assign(room, stats.rooms[roomName]);
+    });
+
     _.assign(gcl, { power });
 
     const statsData = { tick, rooms, send, flags, tasks, gcl, leaderboard, market };

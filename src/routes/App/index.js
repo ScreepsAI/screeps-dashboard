@@ -25,6 +25,7 @@ class App extends Component {
       this.props.dispatch({ type: 'badge/queryBadge' });
       this.props.dispatch({ type: 'graph/queryGraph' });
       this.props.dispatch({ type: 'memory/queryMemory' });
+      this.props.dispatch({ type: 'market/queryMarket' });
     };
     fetchData();
     setInterval(fetchData, 61000);

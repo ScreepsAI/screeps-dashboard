@@ -19,8 +19,8 @@ export default {
       const local = localStorage.getItem('badge');
       if (_.isNull(local) || (time > 0 && Date.now() - time > 3600000)) {
         try {
-          let Data = yield call(() => request(`https://screepspl.us/api/badge/${USERNAME}.json`));
-          Data = Data.data;
+          let Data = yield call(() => request('/api/badge'));
+          Data = Data.data.data;
           localStorage.setItem('badge', JSON.stringify(Data));
           yield put({ type: 'queryBadgeSuccess', payload: Data });
           console.log('querry new badge');
