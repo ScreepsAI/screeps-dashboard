@@ -10,6 +10,7 @@ const api = new ScreepsAPI({
 });
 
 start();
+
 async function start() {
   const shards = [].concat(config.shard);
   shards.forEach(shard => {
@@ -32,6 +33,8 @@ async function processStats(data) {
   data = await formatStats(data);
   await addProfileData(data);
   await addLeaderboardData(data);
+  await addOrders(data);
+  await addHistory(data);
   handleLowdb(data);
 }
 
@@ -49,23 +52,32 @@ function formatStats(data) {
   return Promise.resolve({ type, tick, time, stats });
 }
 
+function addHistory(stats) {
+  return api.raw.user.moneyHistory().then(res => {
+    if (!stats.market) stats.market = {};
+    try {
+      stats.market.history = res.list;
+    } catch (e) {}
+    return stats;
+  });
+}
+
+function addOrders(stats) {
+  return api.market.myOrders().then(res => {
+    if (!stats.market) stats.market = {};
+    try {
+      stats.market.orders = res.shards['shard2'];
+    } catch (e) {}
+    return stats;
+  });
+}
+
 function addProfileData(stats) {
   return api.me().then(res => {
-    let credits = res.money || 0;
-    let power = res.power || 0;
-    if (stats.type === 'application/json') {
-      stats.stats.credits = credits;
-      stats.stats.power = power;
-    }
-    if (stats.type === 'text/grafana') {
-      stats.stats += `credits ${credits} ${Date.now()}\n`;
-      stats.stats += `power ${power} ${Date.now()}\n`;
-    }
-    if (stats.type === 'text/influxdb') {
-      stats.stats += `profile,user=${
-        api.user.username
-      } credits=${credits},power=${power} ${Date.now()}\n`;
-    }
+    stats.username = res.username;
+    stats.badge = res.badge;
+    stats.stats.credits = res.money || 0;
+    stats.stats.power = res.power || 0;
     return stats;
   });
 }

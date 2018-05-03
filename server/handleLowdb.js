@@ -14,7 +14,7 @@ module.exports = function(data) {
   const _data = data;
   try {
     console.log(`[${moment().format('hh:mm:ss')}]`, 'lowdb start');
-    const { population, rooms, flags, tasks, power, leaderboard, stats } = data.stats;
+    const { population, rooms, flags, tasks, power, leaderboard, stats, send } = data.stats;
     const { tick, cpu, gcl, market } = stats;
 
     _.forEach(population, creep => {
@@ -28,7 +28,7 @@ module.exports = function(data) {
     _.merge(rooms, stats.rooms);
     _.assign(gcl, { power });
 
-    const statsData = { tick, rooms, flags, tasks, gcl, leaderboard, market };
+    const statsData = { tick, rooms, send, flags, tasks, gcl, leaderboard, market };
 
     const oldGclProgress = db.get(`graph.gcl.progress`).value() || gcl.progress;
     const glcDelta = gcl.progress - oldGclProgress;
@@ -68,6 +68,14 @@ module.exports = function(data) {
     db.set('stats', statsData).write();
 
     db.set('graph', graphData).write();
+
+    db.set('market', _data.market).write();
+
+    db.set('market', _data.market).write();
+
+    db.set('badge', _data.badge).write();
+
+    db.set('username', _data.username).write();
 
     db.set('time', Date.now()).write();
 
