@@ -15,4 +15,21 @@ View.footer = ({ children, className }) => (
   <div className={classnames(style.footer, className)}>{children}</div>
 );
 
+View.box = ({ left, right, className }) => (
+  <div className={classnames(style.box, className)}>
+    {left}
+    {right}
+  </div>
+);
+
+View.boxHeader = ({ svg, title, desc, className }) => (
+  <div className={classnames(style.boxHeader, className)}>
+    {svg}
+    <div className={style.content}>
+      <div className={style.title}>{title}</div>
+      <div className={style.desc}>{desc}</div>
+    </div>
+  </div>
+);
+
 export default View;

@@ -1,9 +1,10 @@
 import { Component } from 'react';
 import style from './index.scss';
-import { Svg, Box, LineChart, Resource } from '../../components';
+import { Svg, Box, LineChart, Resource, View } from '../../components';
 import { updateDate, shortNumber, formatNumber } from '../../utils';
 import { Progress, Tooltip } from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
 
 export class Room extends Component {
   constructor(props) {
@@ -12,11 +13,12 @@ export class Room extends Component {
     this.memory = props.memory;
     this.graph = props.graph;
     this.badge = props.badge;
+    this.send = props.send;
   }
 
   rcl = () => {
     const { controller } = this.memory;
-    let controllerSvg = (
+    const controllerSvg = (
       <Svg.controller
         badge={this.badge}
         content={{
@@ -32,6 +34,7 @@ export class Room extends Component {
         className={style.title}
         href={`https://screeps.com/a/#!/room/shard2/${this.name}`}
         target="_blank"
+        name={this.name}
       >
         {this.name}
       </a>
@@ -66,31 +69,22 @@ export class Room extends Component {
       ];
       return (
         <Tooltip title={tooltipText}>
-          <div className={style.left}>
-            {controllerSvg}
-            <div className={style.content}>
-              {roomName}
-              {progress}
-            </div>
-          </div>
+          <View.boxHeader svg={controllerSvg} title={roomName} desc={progress} />
         </Tooltip>
       );
     } else {
-      return (
-        <div className={style.left}>
-          {controllerSvg}
-          <div className={style.content}>{roomName}</div>
-        </div>
-      );
+      return <View.boxHeader svg={controllerSvg} title={roomName} />;
     }
   };
 
   rclChart = () => {
+    const { deltas } = this.graph;
+    if (deltas.length === 0) return null;
     const data = [];
     const avg = 6;
     const newDeltas = [];
     let newDelta = 0;
-    _.forEach(this.graph.deltas, (value, index) => {
+    _.forEach(deltas, (value, index) => {
       newDelta += value;
       if ((index + 1) % avg === 0 && newDelta > 0) {
         newDeltas.push(Math.floor(newDelta / (60 * avg) * 3));
@@ -111,6 +105,7 @@ export class Room extends Component {
 
   storage = () => {
     const { storage } = this.memory;
+    if (!storage || !storage.store) return null;
     const List = [];
     const energy = [];
     const res = [];
@@ -143,29 +138,22 @@ export class Room extends Component {
     _.forEach(_.sortBy(res, 'value').reverse(), buildList);
     _.forEach(energy, buildList);
 
-    let titleColor = storage.store > 900000 ? '#FF7A7A' : '#eee';
-
-    return (
-      <div className={style.storage}>
-        <div className={style.left}>
-          <Svg.storage content={storage.resources} />
-          <div className={style.content}>
-            <div className={style.title} style={{ color: titleColor }}>
-              STORAGE {Math.floor(storage.store / 10000)}%
-            </div>
-            <div className={style.desc}>
-              {' '}
-              {formatNumber(storage.store)} ( {shortNumber(storage.store)} / 1M )
-            </div>
-          </div>
-        </div>
-        <div className={style.list}>{List}</div>
-      </div>
+    const titleColor = storage.store > 900000 ? '#FF7A7A' : '#eee';
+    const boxHeader = (
+      <View.boxHeader
+        svg={<Svg.storage content={storage.resources} />}
+        title={
+          <span style={{ color: titleColor }}>STORAGE {Math.floor(storage.store / 10000)}%</span>
+        }
+        desc={`${formatNumber(storage.store)} ( ${shortNumber(storage.store)} / 1M )`}
+      />
     );
+    return <View.box left={boxHeader} right={<div>{List}</div>} />;
   };
 
   terminal = () => {
     const { terminal } = this.memory;
+    if (!terminal || !terminal.store) return null;
     const List = [];
     const energy = [];
     const res = [];
@@ -198,52 +186,67 @@ export class Room extends Component {
     _.forEach(_.sortBy(res, 'value').reverse(), buildList);
     _.forEach(energy, buildList);
 
-    let titleColor = terminal.store > 250000 ? '#FF7A7A' : '#eee';
-
-    return (
-      <div className={style.storage}>
-        <div className={style.left}>
-          <Svg.terminal content={terminal.resources} />
-          <div className={style.content}>
-            <div className={style.title} style={{ color: titleColor }}>
-              STORAGE {Math.floor(terminal.store / 3000)}%
-            </div>
-            <div className={style.desc}>
-              {' '}
-              {formatNumber(terminal.store)} ( {shortNumber(terminal.store)} / 300k)
-            </div>
-          </div>
-        </div>
-        <div className={style.list}>{List}</div>
-      </div>
+    const titleColor = terminal.store > 250000 ? '#FF7A7A' : '#eee';
+    const boxHeader = (
+      <View.boxHeader
+        svg={<Svg.terminal content={terminal.resources} />}
+        title={
+          <span style={{ color: titleColor }}>TERMINAL {Math.floor(terminal.store / 3000)}%</span>
+        }
+        desc={`${formatNumber(terminal.store)} ( ${shortNumber(terminal.store)} / 300,000 )`}
+      />
     );
+    return <View.box left={boxHeader} right={<div>{List}</div>} />;
   };
 
   order = () => {
     const { resources } = this.memory;
-    const reactionData = resources.reactions ? resources.reactions.orders : [];
+    if (!resources) return null;
+    const sendData = this.send || [];
     const orderData = resources.orders || [];
     const offerData = resources.offers || [];
-    const hide = reactionData.length === 0 && orderData.length === 0 && offerData.length === 0;
+    const hide =
+      !sendData ||
+      !orderData ||
+      !offerData ||
+      (sendData.length === 0 && orderData.length === 0 && offerData.length === 0);
+    if (hide) return null;
     const buildList = data => {
       if (data.length === 0) return 'none';
       let list = [];
-      _.forEach(data, o =>
-        list.push(
-          <div key={o.type}>
-            <Resource type={o.type} />
-            <span>{formatNumber(o.amount, 0)}</span>
-          </div>
-        )
-      );
+      _.forEach(data, (o, i) => {
+        if (o.from) {
+          const isFrom = o.from === this.name;
+          const color = isFrom ? '#f92672' : '#a6e22e';
+          const room = isFrom ? o.to : o.from;
+          list.push(
+            <div key={i} className={style.send}>
+              <span style={{ color: '#555' }}>[{moment(o.time).format('hh:mm')}]</span>
+              <Resource type={o.type} />
+              <span style={{ color }}>
+                {isFrom ? '-' : '+'}
+                {formatNumber(o.amount, 0)}
+              </span>
+              {isFrom ? 'to' : 'from'}
+              <a href={`#${room}`}>{room}</a>
+            </div>
+          );
+        } else {
+          list.push(
+            <div key={i}>
+              <Resource type={o.type} />
+              <span>{formatNumber(o.amount, 0)}</span>
+            </div>
+          );
+        }
+      });
       return list;
     };
-    if (hide) return null;
     return (
       <div className={style.order}>
         <div>
-          <div className={style.title}>REACTION</div>
-          <div className={style.orderList}>{buildList(reactionData)}</div>
+          <div className={style.title}>HISTORY</div>
+          <div className={style.orderList}>{buildList(sendData)}</div>
         </div>
         <div>
           <div className={style.title}>ORDER</div>
@@ -263,7 +266,7 @@ export class Room extends Component {
     const List = [];
     const handleRole = (role, roleName) => {
       if (!list[roleName]) list[roleName] = [];
-      _.forEach(role, handleCreep);
+      _.forEach(_.filter(role, c => c.spawned), handleCreep);
     };
     const handleCreep = (creep, index) => {
       const tooltipText = (
@@ -307,13 +310,63 @@ export class Room extends Component {
   };
 
   spawn = () => {
-    const { spawnQueueLow, spawnQueueMedium, spawnQueueHigh } = this.memory;
-    const hide =
-      spawnQueueLow.length === 0 && spawnQueueMedium.length === 0 && spawnQueueHigh.length === 0;
+    let { spawns, energy } = this.memory;
+    if (!spawns || _.size(spawns) === 0) return null;
+    spawns = Object.values(spawns) || [];
+    const spawning = _.filter(spawns, s => s.spawning);
+    const spawn = spawning.length > 0 ? spawning[0] : spawns[0];
+
+    const boxHeader = (
+      <View.boxHeader
+        svg={<Svg.spawn content={spawn} />}
+        title={
+          spawning.length > 0
+            ? `SPAWING ${Math.floor((1 - spawning[0].remainingTime / spawning[0].needTime) * 100)}%`
+            : `SPAWN`
+        }
+        desc={`Energy: ${formatNumber(energy.available)} / ${formatNumber(
+          energy.capacityAvailable
+        )}`}
+      />
+    );
+
+    return <View.box left={boxHeader} />;
+  };
+
+  queue = () => {
+    let { spawns } = this.memory;
+    spawns = _.filter(Object.values(spawns), s => s.spawning) || [];
+    const { spawnQueueHigh, spawnQueueMedium, spawnQueueLow } = this.memory;
+    if (
+      !spawns ||
+      !spawnQueueHigh ||
+      !spawnQueueMedium ||
+      !spawnQueueLow ||
+      (spawns.length === 0 &&
+        spawnQueueHigh.length === 0 &&
+        spawnQueueMedium.length === 0 &&
+        spawnQueueLow.length === 0)
+    )
+      return null;
+    const spawning = [];
+    _.forEach(this.memory.creeps, role => {
+      _.forEach(role, c => {
+        if (c.spawned) return;
+        let parts = [];
+        _.forEach(c.body, (v, k) => {
+          if (k !== 'carry') parts = parts.concat(_.fill(Array(v), k));
+        });
+        spawning.push({
+          ...c,
+          name: c.creepName,
+          parts,
+        });
+      });
+    });
     const buildList = queue => {
       if (queue.length === 0) return 'none';
       const list = [];
-      _.forEach(queue, creep => {
+      _.forEach(queue, (creep, i) => {
         let destiny;
         if (creep.destiny && creep.destiny.targetName) {
           destiny = [
@@ -339,7 +392,7 @@ export class Room extends Component {
         );
         const Name = creep.name.split('-');
         list.push(
-          <Tooltip key={creep.name} title={tooltipText}>
+          <Tooltip key={i} title={tooltipText}>
             <div className={style.queueBox}>
               <Svg.creep content={{ body: creep.parts }} badge={this.badge} array />
               <span>
@@ -352,9 +405,12 @@ export class Room extends Component {
       });
       return list;
     };
-    if (hide) return null;
     return (
       <div className={style.order}>
+        <div>
+          <div className={style.title}>SPAWNING</div>
+          <div className={style.orderList}>{buildList(spawning)}</div>
+        </div>
         <div>
           <div className={style.title}>HIGH</div>
           <div className={style.orderList}>{buildList(spawnQueueHigh)}</div>
@@ -371,43 +427,123 @@ export class Room extends Component {
     );
   };
 
+  lab = () => {
+    const { labs, resources } = this.memory;
+    if (!labs || _.size(labs) === 0) return null;
+    if (!resources || !resources.reactions) return null;
+    const { seed_a, seed_b } = resources.reactions;
+    if (!seed_a || !seed_b) return null;
+    const order = resources.reactions.orders[0];
+    if (!order || !order.type) return null;
+    const labListA = [];
+    const labListB = [];
+    const energy = [];
+    const mineral = [];
+    const seedMineral = [];
+    let seedType = [];
+    _.forEach(labs, (l, i) => {
+      if (_.includes([seed_a, seed_b], i)) {
+        seedType.push(l.mineralType);
+        seedMineral.push(l.mineralAmount);
+        labListA.push(
+          <div key={i} className={style.labBox}>
+            <Svg.lab content={l} size={40} />
+          </div>
+        );
+      } else {
+        energy.push(l.energy);
+        mineral.push(l.mineralAmount);
+        labListB.push(<Svg.lab key={i} content={l} size={40} scale={1} />);
+      }
+    });
+
+    const boxHeader = (
+      <View.boxHeader
+        svg={
+          <Svg.lab
+            content={{
+              energy: _.sum(energy) / energy.length,
+              mineralAmount: _.sum(mineral) / mineral.length,
+            }}
+            size={60}
+            scale={0.9}
+          />
+        }
+        title={'LABS'}
+        desc={`${seedType[0]} + ${seedType[1]} => ${order.type} ( ${shortNumber(order.amount)} )`}
+      />
+    );
+    return (
+      <View.box
+        left={boxHeader}
+        right={
+          <div className={style.right}>
+            <div className={style.labList}>
+              <div className={style.icon}>{labListA[0]}</div>
+              <div className={style.value}>
+                <Resource type={seedType[0]} /> {shortNumber(seedMineral[0])}
+              </div>
+            </div>
+            <div className={style.labList}>
+              <div className={style.icon}>{labListA[1]}</div>
+              <div className={style.value}>
+                <Resource type={seedType[1]} /> {shortNumber(seedMineral[1])}
+              </div>
+            </div>
+            <div className={style.labList}>
+              <div className={style.icon}>{labListB}</div>
+              <div className={style.value}>
+                <Resource type={order.type} /> {formatNumber(_.sum(mineral), 0)}
+              </div>
+            </div>
+          </div>
+        }
+      />
+    );
+  };
+
   render() {
     return (
-      <div className={style.roomView}>
-        <div className={style.header}>
-          {this.rcl()}
-          <div className={style.right}>
-            <Box
-              title="rcl"
-              value={this.memory.RCL}
-              color={['rgb(98, 230, 172)', 'rgba(98, 230, 172, .5)']}
-              circle
-              small
-            />
-            {this.graph.level < 8 ? this.rclChart() : null}
-            {this.memory.storage.store > 0 ? (
+      <div className={style.roomView} id={this.name}>
+        <View.box
+          className={style.header}
+          left={this.rcl()}
+          right={
+            <div className={style.right}>
               <Box
-                title="storage"
-                value={this.memory.storage.store}
-                color={['rgb(255, 201, 107)', 'rgba(255, 201, 107, .5)']}
+                title="rcl"
+                value={this.memory.RCL}
+                color={['rgb(98, 230, 172)', 'rgba(98, 230, 172, .5)']}
+                circle
                 small
               />
-            ) : null}
-            {this.memory.terminal.store > 0 ? (
-              <Box
-                title="terminal"
-                value={this.memory.terminal.store}
-                color={['rgb(174, 129, 255)', 'rgba(174, 129, 255, .5)']}
-                small
-              />
-            ) : null}
-          </div>
-        </div>
+              {this.graph.level < 8 ? this.rclChart() : null}
+              {this.memory.storage.store > 0 ? (
+                <Box
+                  title="storage"
+                  value={this.memory.storage.store}
+                  color={['rgb(255, 201, 107)', 'rgba(255, 201, 107, .5)']}
+                  small
+                />
+              ) : null}
+              {this.memory.terminal.store > 0 ? (
+                <Box
+                  title="terminal"
+                  value={this.memory.terminal.store}
+                  color={['rgb(174, 129, 255)', 'rgba(174, 129, 255, .5)']}
+                  small
+                />
+              ) : null}
+            </div>
+          }
+        />
         <div className={style.body}>
-          {this.memory.storage.store > 0 ? this.storage() : null}
-          {this.memory.terminal.store > 0 ? this.terminal() : null}
-          {this.memory.resources ? this.order() : null}
           {this.spawn()}
+          {this.queue()}
+          {this.storage()}
+          {this.terminal()}
+          {this.order()}
+          {this.lab()}
           {this.creep()}
         </div>
       </div>

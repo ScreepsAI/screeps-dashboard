@@ -1,16 +1,16 @@
 import style from './index.scss';
 import _ from 'lodash';
 
-export default ({ content = {}, size = 60, scale = 0.8 }) => {
+export default ({ content = {}, size = 50, scale = 1 }) => {
   const _size = size;
   size = size * scale;
-  const MINERAL_TRANSFORM = content.mineralAmount / content.mineralCapacity;
-  const ENERGY_WIDTH = 72 * (content.energy / content.energyCapacity);
-  const ENERGY_X = -36 * (content.energy / content.energyCapacity);
+  const MINERAL_TRANSFORM = content.mineralAmount / 3000;
+  const ENERGY_WIDTH = 72 * (content.energy / 2000);
+  const ENERGY_X = -36 * (content.energy / 2000);
   return (
     <div className={style.box} style={{ width: _size, height: _size }}>
-      <svg viewBox="0 0 120 120" height={size} width={size}>
-        <g transform="translate(60,55)">
+      <svg viewBox="0 0 200 200" height={size} width={size}>
+        <g transform="translate(100,100)">
           <path
             d="M 50 40 A 60 60 0 1 0 -50 40 V 63 H 50 Z"
             fill="#181818"

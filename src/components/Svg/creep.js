@@ -14,6 +14,7 @@ export default ({
 }) => {
   const _size = size;
   size = size * scale;
+
   let parts = [];
   if (!array) {
     _.forEach(content.body, (v, k) => {

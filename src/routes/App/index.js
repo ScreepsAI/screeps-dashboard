@@ -19,16 +19,17 @@ const State = ({ badge, memory, graph, global }) => {
 };
 
 class App extends Component {
+  fetchData = () => {
+    this.props.dispatch({ type: 'global/start' });
+    this.props.dispatch({ type: 'badge/queryBadge' });
+    this.props.dispatch({ type: 'graph/queryGraph' });
+    this.props.dispatch({ type: 'memory/queryMemory' });
+    this.props.dispatch({ type: 'market/queryMarket' });
+  };
+
   componentWillMount() {
-    const fetchData = () => {
-      this.props.dispatch({ type: 'global/start' });
-      this.props.dispatch({ type: 'badge/queryBadge' });
-      this.props.dispatch({ type: 'graph/queryGraph' });
-      this.props.dispatch({ type: 'memory/queryMemory' });
-      this.props.dispatch({ type: 'market/queryMarket' });
-    };
-    fetchData();
-    setInterval(fetchData, 61000);
+    this.fetchData();
+    setInterval(this.fetchData, 61000);
   }
 
   body = () => {
@@ -50,7 +51,8 @@ class App extends Component {
       </div>
     );
     let RoomView = [];
-    _.forEach(memory.rooms, (roomMemory, roomName) =>
+    _.forEach(memory.rooms, (roomMemory, roomName) => {
+      const send = _.filter(memory.send, s => s.from === roomName || s.to === roomName).reverse();
       RoomView.push(
         <Room
           key={roomName}
@@ -58,9 +60,10 @@ class App extends Component {
           memory={roomMemory}
           graph={graph.rooms[roomName]}
           badge={badge}
+          send={send}
         />
-      )
-    );
+      );
+    });
     return (
       <View.body key={time}>
         <div className={style.showcase}>

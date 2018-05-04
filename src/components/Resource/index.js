@@ -5,7 +5,7 @@ export default ({ type = 'O', size = 16 }) => {
   let content;
   if (type === 'energy') {
     content = <circle cx={size / 2} cy={size / 2} r={size / 4} style={{ fill: '#fee476' }} />;
-  } else if (type === 'energy') {
+  } else if (type === 'power') {
     content = <circle cx={size / 2} cy={size / 2} r={size / 4} style={{ fill: '#f1243a' }} />;
   } else {
     const BASE_MINERALS = {

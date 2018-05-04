@@ -10,17 +10,7 @@
 .header {
   padding: 0.5rem 1rem;
   background: rgba(#333, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  @include media($m-middle) {
-    flex-direction: column;
-    .left {
-      padding: 0.5rem 0;
-    }
-  }
   .right {
-    display: flex;
     > div {
       margin-left: -1rem;
       &:first-child {
@@ -43,46 +33,7 @@
     padding: 0.8rem 1rem;
   }
 }
-.title {
-  font-weight: 600;
-  text-shadow: 0 2px 4px rgba(#000, 0.2);
-}
-.desc {
-  margin-top: 0.2rem;
-  font-size: 0.8rem;
-  color: #c2c2c2;
-}
-.left {
-  display: flex;
-  align-items: center;
-  color: #eee;
-}
-.content {
-  margin-left: 1rem;
-}
-.storage {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  @include media($m-middle) {
-    flex-direction: column;
 
-    &:first-child {
-      border-bottom: 1px solid rgba(#fff, 0.05);
-    }
-  }
-  .list {
-    margin-left: 1rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    @include media($m-middle) {
-      margin-left: 0;
-      margin-top: 1rem;
-    }
-  }
-}
 .resCell {
   min-width: 3rem;
   + .resCell {
@@ -120,38 +71,37 @@
     font-size: 0.95rem;
   }
   .orderList {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    flex: 1;
+    font-family: $font-code;
     font-size: 0.9rem;
     margin-top: 1rem;
     color: #999;
-    width: 100%;
     > div {
-      width: 50%;
       display: flex;
-      justify-content: center;
-      align-items: center;
+
       margin-top: 0.5rem;
       > span {
         margin-left: 0.5rem;
         color: #eee;
-        font-family: $font-code;
+      }
+    }
+    .send {
+      > span {
+        margin-right: 0.5rem;
+      }
+      > a {
+        margin-left: 0.5rem;
       }
     }
   }
   > div {
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 1rem;
+    padding: 1rem 1rem 1.5rem;
     background: rgba(#000, 0.2);
     flex: 1;
     flex-direction: column;
     + div {
-      margin-left: 0.5rem;
+      margin-left: 2px;
     }
   }
 }
@@ -163,7 +113,7 @@
   }
 }
 .roleBox {
-  background: rgba(#fff, 0.02);
+  background: #2a2a2a;
   flex: 1;
   box-shadow: 0 4px 24px rgba(#000, 0.2);
   padding: 1rem;
@@ -178,7 +128,7 @@
     text-align: center;
   }
   + .roleBox {
-    margin-left: 0.5rem;
+    margin-left: 2px;
   }
 }
 .creepBox {
@@ -233,5 +183,46 @@
   .target {
     font-size: 0.6rem;
     color: #999;
+  }
+}
+
+.labList {
+  position: relative;
+  min-width: 6rem;
+  @include media($m-middle) {
+    flex: 1;
+    min-width: 40%;
+    &:last-child {
+      margin-top: 0.5rem;
+      margin-left: 0;
+    }
+  }
+  + .labList {
+    margin-left: 2px;
+  }
+  .icon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .value {
+    padding: 0.4rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 0.2rem;
+    margin-top: 0.2rem;
+    background: rgba(#000, 0.2);
+    font-size: 0.8rem;
+    font-family: $font-code;
+    > div {
+      margin-right: 0.5rem;
+      + div {
+        margin-left: 1rem;
+      }
+    }
   }
 }

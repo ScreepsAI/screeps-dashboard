@@ -28,3 +28,41 @@
     flex-direction: column;
   }
 }
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  > div {
+    display: flex;
+    align-items: center;
+  }
+  @include media($m-middle) {
+    flex-direction: column;
+    justify-content: center;
+    + .box {
+      margin-top: 1rem;
+    }
+    > div {
+      flex-wrap: wrap;
+      padding: 0.5rem 0;
+      justify-content: center;
+    }
+  }
+}
+
+.boxHeader {
+  display: flex;
+  align-items: center;
+  .content {
+    margin-left: 1rem;
+  }
+  .title {
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(#000, 0.2);
+  }
+  .desc {
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    color: #c2c2c2;
+  }
+}
