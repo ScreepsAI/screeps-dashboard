@@ -6,7 +6,7 @@ export default ({ badge }) => {
     <a key="logo" href={`https://canisminor.cc`} target="_blank">
       <Logo />
     </a>,
-    <div key="menu">
+    <div className={style.right} key="menu">
       <div className={style.content}>
         <div>Screeps Dashboard</div>
         <div className={style.username}>{USERNAME}</div>
