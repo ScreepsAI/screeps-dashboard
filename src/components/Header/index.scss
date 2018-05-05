@@ -9,8 +9,10 @@
 
 .content {
   text-align: right;
-  margin-right: 2rem;
   text-shadow: 0 2px 4px rgba(#000, 0.5);
+  @include media($m-large) {
+    margin-right: 2rem;
+  }
   @include media($m-middle) {
     margin-right: 3rem;
   }

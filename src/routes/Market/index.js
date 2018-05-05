@@ -10,9 +10,9 @@ import moment from 'moment';
 const State = ({ market, memory, global }) => {
   return {
     time: global.time,
-    send: memory.send,
+    memory,
     market,
-    loading: !_.get(market, 'history') || !_.get(memory, 'send'),
+    loading: !_.get(market, 'history') || !_.get(memory, 'tick'),
   };
 };
 
@@ -152,7 +152,7 @@ class Market extends Component {
   };
 
   send = () => {
-    const { send } = this.props;
+    const { send } = this.props.memory;
     const list = [];
     _.forEach(send, (o, i) => {
       list.push(

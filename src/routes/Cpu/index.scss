@@ -28,4 +28,8 @@
   font-family: $font-code;
   margin-bottom: 1.5rem;
   color: #999;
+  @include media($m-middle) {
+    font-size: 0.8rem;
+    padding-left: 1.5rem;
+  }
 }
