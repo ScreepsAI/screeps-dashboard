@@ -18,6 +18,16 @@
   }
 }
 
+.avatar {
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(#000, 0.5);
+  border: 3px solid #fff;
+  margin-left: 1rem;
+  @include media($m-large) {
+    display: none;
+  }
+}
+
 .username {
   color: $c-font-yellow;
   font-size: 0.9rem;
