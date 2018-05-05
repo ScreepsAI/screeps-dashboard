@@ -69,7 +69,9 @@ export class Room extends Component {
       ];
       return (
         <Tooltip title={tooltipText}>
-          <View.boxHeader svg={controllerSvg} title={roomName} desc={progress} />
+          <div>
+            <View.boxHeader svg={controllerSvg} title={roomName} desc={progress} />
+          </div>
         </Tooltip>
       );
     } else {
@@ -91,7 +93,7 @@ export class Room extends Component {
         newDelta = 0;
       }
     });
-    _.forEach(newDeltas, (value, index) => data.push({ x: index, y: value }));
+    _.forEach(newDeltas, (y, x) => data.push({ x, y }));
     return (
       <LineChart
         className={style.rclChart}
@@ -121,7 +123,7 @@ export class Room extends Component {
       let color = '#999';
       if (res.value > 10000) color = '#eee';
       if (res.type === 'energy') {
-        color = res.value > 100000 ? '#fee476' : '#FF7A7A';
+        color = res.value > 100000 ? '#fee476' : '#f92672';
       }
       List.push(
         <div key={res.type} className={style.resCell}>
@@ -138,7 +140,7 @@ export class Room extends Component {
     _.forEach(_.sortBy(res, 'value').reverse(), buildList);
     _.forEach(energy, buildList);
 
-    const titleColor = storage.store > 900000 ? '#FF7A7A' : '#eee';
+    const titleColor = storage.store > 900000 ? '#f92672' : '#eee';
     const boxHeader = (
       <View.boxHeader
         svg={<Svg.storage content={storage.resources} />}
@@ -169,7 +171,7 @@ export class Room extends Component {
       let color = '#999';
       if (res.value > 10000) color = '#eee';
       if (res.type === 'energy') {
-        color = res.value > 90000 ? '#fee476' : '#FF7A7A';
+        color = res.value > 90000 ? '#fee476' : '#f92672';
       }
       List.push(
         <div key={res.type} className={style.resCell}>
@@ -186,7 +188,7 @@ export class Room extends Component {
     _.forEach(_.sortBy(res, 'value').reverse(), buildList);
     _.forEach(energy, buildList);
 
-    const titleColor = terminal.store > 250000 ? '#FF7A7A' : '#eee';
+    const titleColor = terminal.store > 250000 ? '#f92672' : '#eee';
     const boxHeader = (
       <View.boxHeader
         svg={<Svg.terminal content={terminal.resources} />}
@@ -456,6 +458,9 @@ export class Room extends Component {
         labListB.push(<Svg.lab key={i} content={l} size={40} scale={1} />);
       }
     });
+    const isStop = _.includes(seedType, null);
+    const color = isStop ? '#f92672' : '#fff';
+    const tilte = isStop ? 'LABS STOPED' : 'LABS PRODUCTING';
 
     const boxHeader = (
       <View.boxHeader
@@ -469,7 +474,7 @@ export class Room extends Component {
             scale={0.9}
           />
         }
-        title={'LABS'}
+        title={<span style={{ color }}>{tilte}</span>}
         desc={`${seedType[0]} + ${seedType[1]} => ${order.type} ( ${shortNumber(order.amount)} )`}
       />
     );

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import style from './index.scss';
 export default ({ type = 'O', size = 16 }) => {
+  if (type === null) return null;
   let finalWidth = size;
   let content;
   if (type === 'energy') {

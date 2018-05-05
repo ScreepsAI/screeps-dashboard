@@ -1,20 +1,21 @@
 import style from './index.scss';
-import { Logo, Svg } from '../';
+import { Logo, Menu } from '../';
 
 export default ({ badge }) => {
   return [
-    <Logo key="header-left" />,
-    <a
-      key="header-right"
-      className={style.right}
-      href={`https://screeps.com/a/#!/profile/${USERNAME}`}
-      target="_blank"
-    >
+    <Logo key="logo" />,
+    <div key="menu">
       <div className={style.content}>
         <div>Screeps Dashboard</div>
         <div className={style.username}>{USERNAME}</div>
       </div>
-      <Svg.badge className={style.avatar} content={badge} size="38" />
-    </a>,
+      <Menu
+        content={[
+          { title: 'Room', to: '/' },
+          { title: 'Market', to: '/market' },
+          { title: 'Cpu', to: '/cpu' },
+        ]}
+      />
+    </div>,
   ];
 };

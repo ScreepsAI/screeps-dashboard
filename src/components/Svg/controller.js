@@ -9,7 +9,10 @@ export default ({
   },
   badge,
   size = 60,
+  scale = 1,
 }) => {
+  const _size = size;
+  size = size * scale;
   const START_X = 80 * Math.cos(Math.PI / 8);
   const START_Y = 80 * Math.sin(Math.PI / 8);
 
@@ -75,7 +78,7 @@ export default ({
   if (content.level < 8) {
   }
   return (
-    <div className={style.box} style={{ width: size, height: size }}>
+    <div className={style.box} style={{ width: _size, height: _size }}>
       <svg height={size} width={size} viewBox="0 0 200 200">
         <g transform="translate(100,100)">
           <path

@@ -29,6 +29,7 @@ module.exports = {
     'THREE': true,
     'USERNAME': true,
     'localStorage': true,
+    'self': true,
   },
   env: {
     'es6': true,

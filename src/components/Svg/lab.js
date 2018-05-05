@@ -1,5 +1,4 @@
 import style from './index.scss';
-import _ from 'lodash';
 
 export default ({ content = {}, size = 50, scale = 1 }) => {
   const _size = size;

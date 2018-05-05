@@ -1,11 +1,5 @@
 @import 'import';
 
-.avatar {
-  box-sizing: border-box;
-  box-shadow: 0 2px 4px rgba(#000, 0.5);
-  border: 3px solid #fff;
-}
-
 .right {
   color: #eee;
   display: flex;
@@ -15,8 +9,11 @@
 
 .content {
   text-align: right;
-  margin-right: 1rem;
+  margin-right: 2rem;
   text-shadow: 0 2px 4px rgba(#000, 0.5);
+  @include media($m-middle) {
+    margin-right: 3rem;
+  }
 }
 
 .username {

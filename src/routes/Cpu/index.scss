@@ -1,0 +1,31 @@
+@import 'import';
+.loading {
+  text-align: center;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart {
+  margin-bottom: 2rem;
+  > canvas {
+    width: 100% !important;
+    height: 100px !important;
+  }
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-shadow: 0 4px 16px rgba(#000, 0.2);
+  margin-bottom: 0.5rem;
+  @include media($m-middle) {
+    padding-left: 1.5rem;
+  }
+}
+.desc {
+  font-family: $font-code;
+  margin-bottom: 1.5rem;
+  color: #999;
+}

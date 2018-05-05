@@ -4,12 +4,12 @@
   margin: 0 auto;
 }
 .header {
-  padding: 3rem 1rem;
+  padding: 2.5rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   @include media($m-middle) {
-    padding: 1rem;
+    padding: 1.5rem;
   }
 }
 .body {
