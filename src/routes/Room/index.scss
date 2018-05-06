@@ -7,6 +7,14 @@
     box-shadow: 0 4px 24px rgba(#000, 0.1);
   }
 }
+.roomTitle {
+  display: flex;
+  align-items: center;
+  > div {
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
+}
 .header {
   padding: 0.5rem 1rem;
   background: rgba(#333, 0.5);

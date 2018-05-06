@@ -17,7 +17,7 @@ export class Room extends Component {
   }
 
   rcl = () => {
-    const { controller } = this.memory;
+    const { controller, mineralType, RBL, RDL, walls, ramparts } = this.memory;
     const controllerSvg = (
       <Svg.controller
         badge={this.badge}
@@ -31,52 +31,58 @@ export class Room extends Component {
     );
     const roomName = (
       <a
-        className={style.title}
+        className={style.roomTitle}
         href={`https://screeps.com/a/#!/room/shard2/${this.name}`}
         target="_blank"
         name={this.name}
       >
+        <Resource type={mineralType} />
         {this.name}
       </a>
     );
+    const tooltipText = [
+      <div key="rbl">
+        RBL / RDL: {RBL} / {RDL}
+      </div>,
+    ];
+
+    let desc = `Rampart: ${shortNumber(ramparts.avg)} / Wall: ${shortNumber(walls.avg)}`;
     if (this.graph.level < 8) {
       const rclProgress = controller.progress / controller.progressTotal * 100;
       const rclTime = updateDate(this.graph.deltas, this.graph.progress, this.graph.progressTotal);
-      const tooltipText = (
-        <div className={style.tooltip}>
-          <div>
-            Progress:{' '}
-            <span>
-              {[
-                formatNumber(controller.progress, 0),
-                formatNumber(controller.progressTotal, 0),
-              ].join(' / ')}
-            </span>
-          </div>
-          <div>
-            Speed:{' '}
-            <span>
-              {Math.floor(_.sum(this.graph.deltas) / this.graph.deltas.length / 60 * 3)} E/Tick
-            </span>
-          </div>
+      const speed = `${Math.floor(
+        _.sum(this.graph.deltas) / this.graph.deltas.length / 60 * 3
+      )} e/tick`;
+      tooltipText.unshift(
+        <div key="progress">
+          Progress:{' '}
+          <span>
+            {[formatNumber(controller.progress, 0), formatNumber(controller.progressTotal, 0)].join(
+              ' / '
+            )}
+          </span>
         </div>
       );
-      const progress = [
+      tooltipText.unshift(
+        <div key="speed">
+          Speed: <span>{speed}</span>
+        </div>
+      );
+      desc = [
         <Progress key="progress" percent={rclProgress} showInfo={false} />,
         <div key="progress-time" className={style.desc}>
-          {rclProgress.toFixed(1)}% Next level {rclTime}
+          {rclProgress.toFixed(1)}% lvlup {rclTime} ({speed})
         </div>,
       ];
-      return (
-        <Tooltip title={tooltipText}>
-          <div>
-            <View.boxHeader svg={controllerSvg} title={roomName} desc={progress} />
-          </div>
-        </Tooltip>
-      );
-    } else {
-      return <View.boxHeader svg={controllerSvg} title={roomName} />;
     }
+
+    return (
+      <Tooltip title={<div className={style.tooltip}>{tooltipText}</div>}>
+        <div>
+          <View.boxHeader svg={controllerSvg} title={roomName} desc={desc} />
+        </div>
+      </Tooltip>
+    );
   };
 
   rclChart = () => {

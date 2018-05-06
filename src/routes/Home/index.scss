@@ -88,3 +88,33 @@
     font-weight: 600;
   }
 }
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+.tag {
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  background: #313131;
+  box-shadow: 0 4px 8px rgba(#000, 0.2);
+  padding-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  > div {
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
+  > span {
+    background: rgba(98, 230, 172, 0.1);
+    color: rgb(186, 255, 225);
+    width: 2rem;
+    margin-left: 0.5rem;
+    display: block;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

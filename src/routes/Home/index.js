@@ -2,7 +2,7 @@ import style from './index.scss';
 import { Component } from 'react';
 import { connect } from 'dva';
 import { Spin, Progress, Tooltip } from 'antd';
-import { View, Box, Svg } from '../../components';
+import { View, Box, Svg, Resource } from '../../components';
 import _ from 'lodash';
 import { updateDate, shortNumber } from '../../utils';
 import { Room } from '../Room';
@@ -48,9 +48,15 @@ class Home extends Component {
         </div>
       </div>
     );
-    let RoomView = [];
+    const RoomNav = [];
+    const RoomView = [];
     _.forEach(memory.rooms, (roomMemory, roomName) => {
       const send = _.filter(memory.send, s => s.from === roomName || s.to === roomName).reverse();
+      RoomNav.push(
+        <a href={`#${roomName}`} className={style.tag}>
+          <Resource type={roomMemory.mineralType} /> {roomName} <span>{roomMemory.RCL}</span>
+        </a>
+      );
       RoomView.push(
         <Room
           key={roomName}
@@ -89,6 +95,7 @@ class Home extends Component {
             <Box title="power" value={memory.gcl.power} color={['#FF9A9A', '#C54444']} />
           </div>
         </div>
+        <div className={style.navbar}>{RoomNav.reverse()}</div>
         <div>{RoomView.reverse()}</div>
       </View.body>
     );
