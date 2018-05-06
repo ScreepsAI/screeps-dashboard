@@ -99,12 +99,12 @@ class Market extends Component {
   history = () => {
     const { history } = this.props.market;
     const list = [];
-    _.forEach(history, (o, i) => {
+    _.forEach(history.reverse(), (o, i) => {
       o.type = o.type.replace('market.', '');
       const isBuy = o.type === 'buy';
       list.push(
         <tr key={i}>
-          <td style={{ color: '#999' }}>{moment(o.date).format('MM/DD hh:mm')}</td>
+          <td style={{ color: '#999' }}>{moment(o.date).format('MM/DD HH:mm')}</td>
           <td>
             <Resource type={o.market.resourceType} />
           </td>
@@ -157,7 +157,7 @@ class Market extends Component {
     _.forEach(send, (o, i) => {
       list.push(
         <tr key={i}>
-          <td style={{ color: '#999' }}>{moment(o.time).format('MM/DD hh:mm')}</td>
+          <td style={{ color: '#999' }}>{moment(o.time).format('MM/DD HH:mm')}</td>
           <td>
             <Resource type={o.type} />
           </td>
