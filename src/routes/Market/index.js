@@ -112,7 +112,7 @@ class Market extends Component {
           <td>{formatNumber(o.market.price)}</td>
           <td className={style.right}>{formatNumber(o.market.amount, 0)}</td>
           <td style={{ color: isBuy ? '#f92672' : '#a6e22e' }} className={style.right}>
-            {isBuy ? '-' : '+'}
+            {isBuy ? '' : '+'}
             {formatNumber(o.change)}
             <span style={{ color: '#999' }}> / {formatNumber(o.balance)}</span>
           </td>
