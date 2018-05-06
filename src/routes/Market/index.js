@@ -154,7 +154,7 @@ class Market extends Component {
   send = () => {
     const { send } = this.props.memory;
     const list = [];
-    _.forEach(send, (o, i) => {
+    _.forEach(send.reverse(), (o, i) => {
       list.push(
         <tr key={i}>
           <td style={{ color: '#999' }}>{moment(o.time).format('MM/DD HH:mm')}</td>
