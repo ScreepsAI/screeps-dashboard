@@ -145,7 +145,7 @@ class Market extends Component {
             <th className={style.right}>Target</th>
             <th className={style.right}>Room</th>
           </tr>
-          {list.reverse()}
+          {list}
         </tbody>
       </table>
     );
